@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
 
@@ -25,9 +26,8 @@ class RecipesApp extends StatelessWidget {
 
 // Bouncing dots loader, used everywhere instead of CircularProgressIndicator.
 class LoadingDots extends StatefulWidget {
-  final double size;
-
   const LoadingDots({super.key, this.size = 9});
+  final double size;
 
   @override
   State<LoadingDots> createState() => _LoadingDotsState();
@@ -84,18 +84,17 @@ class _LoadingDotsState extends State<LoadingDots>
 // Image.network already knows whether it's still loading, so tracking that
 // manually only creates stale-state bugs when grid items get reused.
 class NetworkImageWithShimmer extends StatelessWidget {
-  final String imageUrl;
-  final double? width;
-  final double? height;
-  final BoxFit fit;
-
   const NetworkImageWithShimmer({
-    super.key,
     required this.imageUrl,
+    super.key,
     this.width,
     this.height,
     this.fit = BoxFit.cover,
   });
+  final String imageUrl;
+  final double? width;
+  final double? height;
+  final BoxFit fit;
 
   Widget _placeholder({Widget? child}) {
     return Container(
@@ -129,7 +128,6 @@ class NetworkImageWithShimmer extends StatelessWidget {
         // came straight from the cache).
         if (loadingProgress == null) return child;
         return Skeletonizer(
-          enabled: true,
           child: _placeholder(child: const LoadingDots(size: 7)),
         );
       },
@@ -241,7 +239,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List recipes = [];
+  List<dynamic> recipes = [];
   bool isLoading = true;
   bool isLoadingMore = false;
   int skip = 0;
@@ -253,11 +251,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    fetchRecipes();
+    unawaited(fetchRecipes());
     scrollController.addListener(() {
       if (scrollController.position.pixels >=
           scrollController.position.maxScrollExtent - 100) {
-        loadMore();
+        unawaited(loadMore());
       }
     });
   }
@@ -311,15 +309,17 @@ class _HomePageState extends State<HomePage> {
 
   void changeSort(String value) {
     sortBy = value;
-    fetchRecipes();
+    unawaited(fetchRecipes());
   }
 
   void openDetails(dynamic recipe) {
     if (isLoading) return;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => DetailsPage(recipeId: recipe['id']),
+    unawaited(
+      Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+          builder: (context) => DetailsPage(recipeId: recipe['id']),
+        ),
       ),
     );
   }
@@ -341,9 +341,13 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: const Icon(Icons.search, color: Color(0xFF7A6A55)),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SearchPage()),
+              unawaited(
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (context) => const SearchPage(),
+                  ),
+                ),
               );
             },
           ),
@@ -452,7 +456,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController controller = TextEditingController();
-  List results = [];
+  List<dynamic> results = [];
   bool isLoading = false;
   bool hasSearched = false;
 
@@ -479,10 +483,12 @@ class _SearchPageState extends State<SearchPage> {
 
   void openDetails(dynamic recipe) {
     if (isLoading) return;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => DetailsPage(recipeId: recipe['id']),
+    unawaited(
+      Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+          builder: (context) => DetailsPage(recipeId: recipe['id']),
+        ),
       ),
     );
   }
@@ -530,9 +536,8 @@ class _SearchPageState extends State<SearchPage> {
 }
 
 class DetailsPage extends StatefulWidget {
+  const DetailsPage({required this.recipeId, super.key});
   final int recipeId;
-
-  const DetailsPage({super.key, required this.recipeId});
 
   @override
   State<DetailsPage> createState() => _DetailsPageState();
@@ -545,7 +550,7 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   void initState() {
     super.initState();
-    fetchDetails();
+    unawaited(fetchDetails());
   }
 
   Future<void> fetchDetails() async {
@@ -589,7 +594,9 @@ class _DetailsPageState extends State<DetailsPage> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    '${recipe['cuisine']} \u00B7 ${recipe['difficulty']} \u00B7 ${recipe['caloriesPerServing']} cal',
+                    '${recipe['cuisine']} \u00B7 '
+                    '${recipe['difficulty']} \u00B7 '
+                    "${recipe['caloriesPerServing']} cal",
                     style: const TextStyle(
                       fontSize: 13,
                       color: Color(0xFFA08F76),

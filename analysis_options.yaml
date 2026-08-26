@@ -1,4 +1,14 @@
-include: package:flutter_lints/flutter.yaml
+include: package:very_good_analysis/analysis_options.yaml
+
+analyzer:
+  language:
+    # Off until the models branch — dynamic Maps everywhere, will error out otherwise.
+    strict-casts: false
 
 linter:
   rules:
+    # Off until the models branch — same reason as strict-casts.
+    avoid_dynamic_calls: false
+
+    # Off permanently — this is for published packages, not an app.
+    public_member_api_docs: false
