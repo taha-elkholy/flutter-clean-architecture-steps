@@ -29,6 +29,11 @@ which is that each branch teaches exactly one lesson.
   better. Ask first.
 - **Never commit directly to `main`.** All work happens on a numbered
   branch and merges through a PR.
+- **A correct fix is still out of scope if it wasn't asked for.** Being
+  right about something (a deprecated API, a better default) doesn't make
+  it this branch's job. `withOpacity` → `withValues` is a theming decision
+  once colors are centralized — not something to slip in during a pure
+  file-move branch, even though the replacement is technically correct.
 - **Don't change visible behaviour while restructuring.** Most branches
   move code around rather than change what the user sees. If a refactor
   would alter the UI, the loading behaviour, or the number of network
