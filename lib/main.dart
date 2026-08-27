@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture_steps/pages/recipe_list_page.dart';
-import 'package:flutter_clean_architecture_steps/theme.dart';
+import 'package:flutter_clean_architecture_steps/style/app_theme.dart';
 
 void main() {
   runApp(const RecipesApp());
@@ -14,7 +14,7 @@ class RecipesApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Recipes',
-      theme: recipesAppTheme,
+      theme: AppTheme.light,
       home: const RecipeListPage(),
     );
   }
