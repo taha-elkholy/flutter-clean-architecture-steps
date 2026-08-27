@@ -87,7 +87,10 @@ class _SearchRecipePageState extends State<SearchRecipePage> {
                   final recipe = isLoading
                       ? placeholderRecipe(index)
                       : results[index];
-                  return buildRecipeGridCard(recipe, () => openDetails(recipe));
+                  return RecipeGridCard(
+                    recipe: recipe,
+                    onTap: () => openDetails(recipe),
+                  );
                 },
               ),
             ),
