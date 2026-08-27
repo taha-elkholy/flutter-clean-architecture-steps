@@ -208,9 +208,9 @@ class _RecipeListPageState extends State<RecipeListPage> {
                     final recipe = isLoading
                         ? placeholderRecipe(index)
                         : recipes[index];
-                    return buildRecipeGridCard(
-                      recipe,
-                      () => openDetails(recipe),
+                    return RecipeGridCard(
+                      recipe: recipe,
+                      onTap: () => openDetails(recipe),
                     );
                   },
                 ),
