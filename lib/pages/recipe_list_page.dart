@@ -104,20 +104,14 @@ class _RecipeListPageState extends State<RecipeListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFBF8F4),
-        elevation: 0,
-        title: const Text(
-          'Recipes',
-          style: TextStyle(
-            color: Color(0xFF2B2420),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        title: const Text('Recipes'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search, color: Color(0xFF7A6A55)),
+            icon: const Icon(Icons.search),
             onPressed: () {
               unawaited(
                 Navigator.push(
@@ -146,18 +140,17 @@ class _RecipeListPageState extends State<RecipeListPage> {
                     ),
                     decoration: BoxDecoration(
                       color: sortBy == 'rating'
-                          ? const Color(0xFFC8683B)
+                          ? theme.colorScheme.primary
                           : Colors.transparent,
-                      border: Border.all(color: const Color(0xFFE4D9C8)),
+                      border: Border.all(color: theme.colorScheme.outline),
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: Text(
                       'Top Rated',
-                      style: TextStyle(
+                      style: theme.textTheme.bodySmall?.copyWith(
                         color: sortBy == 'rating'
-                            ? Colors.white
-                            : const Color(0xFF8A7A64),
-                        fontSize: 13,
+                            ? theme.colorScheme.onPrimary
+                            : theme.colorScheme.secondary,
                       ),
                     ),
                   ),
@@ -172,18 +165,17 @@ class _RecipeListPageState extends State<RecipeListPage> {
                     ),
                     decoration: BoxDecoration(
                       color: sortBy == 'reviewCount'
-                          ? const Color(0xFFC8683B)
+                          ? theme.colorScheme.primary
                           : Colors.transparent,
-                      border: Border.all(color: const Color(0xFFE4D9C8)),
+                      border: Border.all(color: theme.colorScheme.outline),
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: Text(
                       'Most Reviewed',
-                      style: TextStyle(
+                      style: theme.textTheme.bodySmall?.copyWith(
                         color: sortBy == 'reviewCount'
-                            ? Colors.white
-                            : const Color(0xFF8A7A64),
-                        fontSize: 13,
+                            ? theme.colorScheme.onPrimary
+                            : theme.colorScheme.secondary,
                       ),
                     ),
                   ),
@@ -194,8 +186,6 @@ class _RecipeListPageState extends State<RecipeListPage> {
           Expanded(
             child: RefreshIndicator(
               onRefresh: refresh,
-              color: const Color(0xFFC8683B),
-              backgroundColor: const Color(0xFFFBF8F4),
               child: Skeletonizer(
                 enabled: isLoading,
                 child: GridView.builder(

@@ -26,6 +26,8 @@ class _LoadingDotsState extends State<LoadingDots>
 
   @override
   Widget build(BuildContext context) {
+    final dotColor = Theme.of(context).colorScheme.primary;
+
     return AnimatedBuilder(
       animation: controller,
       builder: (context, _) {
@@ -42,9 +44,7 @@ class _LoadingDotsState extends State<LoadingDots>
                   width: widget.size,
                   height: widget.size,
                   decoration: BoxDecoration(
-                    color: const Color(
-                      0xFFC8683B,
-                    ).withValues(alpha: 0.3 + bounce * 0.7),
+                    color: dotColor.withValues(alpha: 0.3 + bounce * 0.7),
                     shape: BoxShape.circle,
                   ),
                 ),

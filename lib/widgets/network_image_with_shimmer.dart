@@ -19,11 +19,11 @@ class NetworkImageWithShimmer extends StatelessWidget {
   final double? height;
   final BoxFit fit;
 
-  Widget _placeholder({Widget? child}) {
+  Widget _placeholder(BuildContext context, {Widget? child}) {
     return Container(
       width: width,
       height: height,
-      color: const Color(0xFFEFE7DC),
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
       child: child == null ? null : Center(child: child),
     );
   }
@@ -31,7 +31,7 @@ class NetworkImageWithShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (imageUrl.isEmpty) {
-      return _placeholder();
+      return _placeholder(context);
     }
     return Image.network(
       imageUrl,
@@ -40,9 +40,10 @@ class NetworkImageWithShimmer extends StatelessWidget {
       fit: fit,
       errorBuilder: (context, error, stackTrace) {
         return _placeholder(
-          child: const Icon(
+          context,
+          child: Icon(
             Icons.broken_image_outlined,
-            color: Color(0xFFA08F76),
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         );
       },
@@ -51,7 +52,7 @@ class NetworkImageWithShimmer extends StatelessWidget {
         // came straight from the cache).
         if (loadingProgress == null) return child;
         return Skeletonizer(
-          child: _placeholder(child: const LoadingDots(size: 7)),
+          child: _placeholder(context, child: const LoadingDots(size: 7)),
         );
       },
     );

@@ -13,6 +13,9 @@ class RecipeGridCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final tertiaryColor = theme.colorScheme.tertiary;
+
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -39,24 +42,22 @@ class RecipeGridCard extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.9),
+                        color: theme.colorScheme.surfaceContainerLowest,
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.star,
                             size: 10,
-                            color: Color(0xFFB4501F),
+                            color: tertiaryColor,
                           ),
                           const SizedBox(width: 2),
                           Text(
                             '${recipe['rating']}',
-                            style: const TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFFB4501F),
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: tertiaryColor,
                             ),
                           ),
                         ],
@@ -72,16 +73,12 @@ class RecipeGridCard extends StatelessWidget {
             recipe['name'],
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontSize: 12.5,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF2B2420),
-            ),
+            style: theme.textTheme.labelLarge,
           ),
           const SizedBox(height: 2),
           Text(
             '${recipe['cuisine']} · ${recipe['difficulty']}',
-            style: const TextStyle(fontSize: 10.5, color: Color(0xFFA08F76)),
+            style: theme.textTheme.labelSmall,
           ),
         ],
       ),

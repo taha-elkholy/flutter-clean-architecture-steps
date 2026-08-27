@@ -36,9 +36,10 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFFBF8F4),
-      appBar: AppBar(backgroundColor: const Color(0xFFFBF8F4), elevation: 0),
+      appBar: AppBar(),
       body: isLoading
           ? const Center(child: LoadingDots())
           : SingleChildScrollView(
@@ -55,33 +56,16 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  Text(
-                    recipe['name'],
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF2B2420),
-                    ),
-                  ),
+                  Text(recipe['name'], style: textTheme.titleMedium),
                   const SizedBox(height: 6),
                   Text(
                     '${recipe['cuisine']} · '
                     '${recipe['difficulty']} · '
                     "${recipe['caloriesPerServing']} cal",
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: Color(0xFFA08F76),
-                    ),
+                    style: textTheme.bodySmall,
                   ),
                   const SizedBox(height: 18),
-                  const Text(
-                    'Ingredients',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF2B2420),
-                    ),
-                  ),
+                  Text('Ingredients', style: textTheme.titleSmall),
                   const SizedBox(height: 8),
                   ...List.generate(
                     recipe['ingredients'].length,
@@ -91,14 +75,7 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
                     ),
                   ),
                   const SizedBox(height: 18),
-                  const Text(
-                    'Instructions',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF2B2420),
-                    ),
-                  ),
+                  Text('Instructions', style: textTheme.titleSmall),
                   const SizedBox(height: 8),
                   ...List.generate(
                     recipe['instructions'].length,

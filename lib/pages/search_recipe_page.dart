@@ -56,10 +56,7 @@ class _SearchRecipePageState extends State<SearchRecipePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFBF8F4),
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFBF8F4),
-        elevation: 0,
         title: TextField(
           controller: controller,
           autofocus: true,
@@ -71,10 +68,10 @@ class _SearchRecipePageState extends State<SearchRecipePage> {
         ),
       ),
       body: !hasSearched
-          ? const Center(
+          ? Center(
               child: Text(
                 'Type a recipe name and hit enter',
-                style: TextStyle(color: Color(0xFFA08F76)),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             )
           : Skeletonizer(
