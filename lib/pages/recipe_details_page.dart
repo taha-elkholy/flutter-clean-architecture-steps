@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_architecture_steps/generated/l10n.dart';
 import 'package:flutter_clean_architecture_steps/widgets/loading_dots.dart';
 import 'package:flutter_clean_architecture_steps/widgets/network_image_with_shimmer.dart';
 import 'package:http/http.dart' as http;
@@ -37,6 +38,7 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final strings = S.of(context);
 
     return Scaffold(
       appBar: AppBar(),
@@ -59,13 +61,15 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
                   Text(recipe['name'], style: textTheme.titleMedium),
                   const SizedBox(height: 6),
                   Text(
-                    '${recipe['cuisine']} · '
-                    '${recipe['difficulty']} · '
-                    "${recipe['caloriesPerServing']} cal",
+                    strings.recipeMetaWithCalories(
+                      recipe['cuisine'] as String,
+                      recipe['difficulty'] as String,
+                      recipe['caloriesPerServing'] as int,
+                    ),
                     style: textTheme.bodySmall,
                   ),
                   const SizedBox(height: 18),
-                  Text('Ingredients', style: textTheme.titleSmall),
+                  Text(strings.ingredients, style: textTheme.titleSmall),
                   const SizedBox(height: 8),
                   ...List.generate(
                     recipe['ingredients'].length,
@@ -75,7 +79,7 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
                     ),
                   ),
                   const SizedBox(height: 18),
-                  Text('Instructions', style: textTheme.titleSmall),
+                  Text(strings.instructions, style: textTheme.titleSmall),
                   const SizedBox(height: 8),
                   ...List.generate(
                     recipe['instructions'].length,

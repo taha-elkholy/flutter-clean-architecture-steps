@@ -1,6 +1,10 @@
 include: package:very_good_analysis/analysis_options.yaml
 
 analyzer:
+  # Generated code is rewritten on every build, so lint fixes never survive.
+  exclude:
+    - lib/generated/**
+
   language:
     # Off until the models branch — dynamic Maps everywhere, will error out otherwise.
     strict-casts: false

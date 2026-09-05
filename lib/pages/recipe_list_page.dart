@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_architecture_steps/generated/l10n.dart';
 import 'package:flutter_clean_architecture_steps/pages/recipe_details_page.dart';
 import 'package:flutter_clean_architecture_steps/pages/search_recipe_page.dart';
 import 'package:flutter_clean_architecture_steps/widgets/loading_dots.dart';
@@ -105,10 +106,11 @@ class _RecipeListPageState extends State<RecipeListPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final strings = S.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Recipes'),
+        title: Text(strings.appTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -146,7 +148,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: Text(
-                      'Top Rated',
+                      strings.topRated,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: sortBy == 'rating'
                             ? theme.colorScheme.onPrimary
@@ -171,7 +173,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: Text(
-                      'Most Reviewed',
+                      strings.mostReviewed,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: sortBy == 'reviewCount'
                             ? theme.colorScheme.onPrimary
