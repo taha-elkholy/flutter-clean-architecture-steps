@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture_steps/extensions/build_context_extensions.dart';
-import 'package:flutter_clean_architecture_steps/generated/l10n.dart';
 import 'package:flutter_clean_architecture_steps/router/app_routes.dart';
 import 'package:flutter_clean_architecture_steps/widgets/recipe_grid_card.dart';
 import 'package:http/http.dart' as http;
@@ -55,7 +54,7 @@ class _SearchRecipePageState extends State<SearchRecipePage> {
 
   @override
   Widget build(BuildContext context) {
-    final strings = S.of(context);
+    final strings = context.strings;
 
     return Scaffold(
       appBar: AppBar(

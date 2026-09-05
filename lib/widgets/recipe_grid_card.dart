@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_architecture_steps/extensions/build_context_extensions.dart';
 import 'package:flutter_clean_architecture_steps/generated/l10n.dart';
 import 'package:flutter_clean_architecture_steps/widgets/network_image_with_shimmer.dart';
 
@@ -15,7 +16,7 @@ class RecipeGridCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final strings = S.of(context);
+    final strings = context.strings;
     final tertiaryColor = theme.colorScheme.tertiary;
 
     return GestureDetector(

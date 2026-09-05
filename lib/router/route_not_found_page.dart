@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_clean_architecture_steps/generated/l10n.dart';
+import 'package:flutter_clean_architecture_steps/extensions/build_context_extensions.dart';
 
 /// Fallback screen for a route the router does not know.
 ///
@@ -14,7 +14,7 @@ class RouteNotFoundPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final strings = S.of(context);
+    final strings = context.strings;
 
     return Scaffold(
       appBar: AppBar(title: Text(strings.routeNotFoundTitle)),

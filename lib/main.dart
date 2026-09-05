@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_architecture_steps/extensions/build_context_extensions.dart';
 import 'package:flutter_clean_architecture_steps/generated/l10n.dart';
 import 'package:flutter_clean_architecture_steps/router/app_router.dart';
 import 'package:flutter_clean_architecture_steps/router/app_routes.dart';
@@ -16,7 +17,7 @@ class RecipesApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      onGenerateTitle: (context) => S.of(context).appTitle,
+      onGenerateTitle: (context) => context.strings.appTitle,
       theme: AppTheme.light,
       localizationsDelegates: const [
         S.delegate,

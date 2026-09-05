@@ -1,4 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_architecture_steps/generated/l10n.dart';
+
+/// Localization lookup on [BuildContext].
+extension LocalizationExtensions on BuildContext {
+  /// The localized strings for the current locale.
+  ///
+  /// Shorthand for `S.of(context)`, so a widget reads
+  /// `context.strings.appTitle` instead of naming the generated class.
+  S get strings => S.of(this);
+}
 
 /// Navigation helpers on [BuildContext].
 ///
