@@ -1,4 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_architecture_steps/generated/l10n.dart';
+
+/// Theme lookups on [BuildContext].
+extension ThemeExtensions on BuildContext {
+  /// The nearest [ThemeData]. Use it when a widget needs more than one part
+  /// of the theme; otherwise prefer [textTheme] or [colorScheme].
+  ThemeData get theme => Theme.of(this);
+
+  /// The theme's text styles.
+  TextTheme get textTheme => Theme.of(this).textTheme;
+
+  /// The theme's colors.
+  ColorScheme get colorScheme => Theme.of(this).colorScheme;
+}
+
+/// Localization lookup on [BuildContext].
+extension LocalizationExtensions on BuildContext {
+  /// The localized strings for the current locale.
+  ///
+  /// Shorthand for `S.of(context)`, so a widget reads
+  /// `context.strings.appTitle` instead of naming the generated class.
+  S get strings => S.of(this);
+}
 
 /// Navigation helpers on [BuildContext].
 ///

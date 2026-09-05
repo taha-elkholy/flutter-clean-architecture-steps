@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_clean_architecture_steps/generated/l10n.dart';
+import 'package:flutter_clean_architecture_steps/extensions/build_context_extensions.dart';
 import 'package:flutter_clean_architecture_steps/widgets/loading_dots.dart';
 import 'package:flutter_clean_architecture_steps/widgets/network_image_with_shimmer.dart';
 import 'package:http/http.dart' as http;
@@ -37,8 +37,8 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final strings = S.of(context);
+    final textTheme = context.textTheme;
+    final strings = context.strings;
 
     return Scaffold(
       appBar: AppBar(),
