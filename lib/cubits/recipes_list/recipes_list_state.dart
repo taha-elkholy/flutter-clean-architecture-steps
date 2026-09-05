@@ -114,6 +114,12 @@ class RecipesSortLoaded extends RecipesSortState {
   ];
 }
 
+/// The first page came back with no recipes. Its own state, so the page never
+/// has to ask whether a loaded list is empty.
+class RecipesSortEmpty extends RecipesSortState {
+  const RecipesSortEmpty();
+}
+
 /// The first page failed, so there is nothing to show. It carries no reason:
 /// this app has no error handling yet.
 class RecipesSortError extends RecipesSortState {

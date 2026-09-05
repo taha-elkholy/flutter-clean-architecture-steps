@@ -25,16 +25,7 @@ class RecipesListCubit extends Cubit<RecipesListState> {
     _emitFor(sort, const RecipesSortLoading());
 
     try {
-      final data = await _getPage(sort: sort, skip: 0);
-      final recipes = data['recipes'] as List<dynamic>;
-      _emitFor(
-        sort,
-        RecipesSortLoaded(
-          recipes: recipes,
-          skip: recipes.length,
-          hasMore: recipes.length < (data['total'] as int),
-        ),
-      );
+      _emitFor(sort, await _firstPage(sort));
     } on Object {
       _emitFor(sort, const RecipesSortError());
     }
@@ -79,19 +70,23 @@ class RecipesListCubit extends Cubit<RecipesListState> {
   /// draws its own spinner, so the recipes stay visible until replaced.
   Future<void> refresh(RecipeSort sort) async {
     try {
-      final data = await _getPage(sort: sort, skip: 0);
-      final recipes = data['recipes'] as List<dynamic>;
-      _emitFor(
-        sort,
-        RecipesSortLoaded(
-          recipes: recipes,
-          skip: recipes.length,
-          hasMore: recipes.length < (data['total'] as int),
-        ),
-      );
+      _emitFor(sort, await _firstPage(sort));
     } on Object {
       // A failed refresh leaves the list exactly as it was.
     }
+  }
+
+  /// Reads page one of [sort] and turns it into the state it belongs in.
+  Future<RecipesSortState> _firstPage(RecipeSort sort) async {
+    final data = await _getPage(sort: sort, skip: 0);
+    final recipes = data['recipes'] as List<dynamic>;
+    if (recipes.isEmpty) return const RecipesSortEmpty();
+
+    return RecipesSortLoaded(
+      recipes: recipes,
+      skip: recipes.length,
+      hasMore: recipes.length < (data['total'] as int),
+    );
   }
 
   Future<Map<String, dynamic>> _getPage({

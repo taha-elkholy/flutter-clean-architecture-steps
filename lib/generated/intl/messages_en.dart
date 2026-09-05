@@ -39,6 +39,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "ingredients": MessageLookupByLibrary.simpleMessage("Ingredients"),
     "instructions": MessageLookupByLibrary.simpleMessage("Instructions"),
     "mostReviewed": MessageLookupByLibrary.simpleMessage("Most Reviewed"),
+    "noRecipes": MessageLookupByLibrary.simpleMessage("No recipes to show"),
     "recipeMeta": m0,
     "recipeMetaWithCalories": m1,
     "recipeNamePlaceholder": MessageLookupByLibrary.simpleMessage(
@@ -53,6 +54,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Type a recipe name and hit enter",
     ),
     "searchHint": MessageLookupByLibrary.simpleMessage("Search recipes..."),
+    "searchNoResults": MessageLookupByLibrary.simpleMessage(
+      "No recipes matched your search",
+    ),
     "somethingWentWrong": MessageLookupByLibrary.simpleMessage(
       "Something went wrong",
     ),

@@ -7,6 +7,7 @@ import 'package:flutter_clean_architecture_steps/cubits/recipes_list/recipes_lis
 import 'package:flutter_clean_architecture_steps/extensions/build_context_extensions.dart';
 import 'package:flutter_clean_architecture_steps/helpers/toast_helpers.dart';
 import 'package:flutter_clean_architecture_steps/router/app_routes.dart';
+import 'package:flutter_clean_architecture_steps/widgets/empty_view.dart';
 import 'package:flutter_clean_architecture_steps/widgets/loading_dots.dart';
 import 'package:flutter_clean_architecture_steps/widgets/recipes_error_view.dart';
 import 'package:flutter_clean_architecture_steps/widgets/recipes_grid.dart';
@@ -123,6 +124,7 @@ class _RecipeListViewState extends State<RecipeListView> {
                     scrollController: scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
                   ),
+                  RecipesSortEmpty() => EmptyView(strings.noRecipes),
                   RecipesSortError() => RecipesErrorView(
                     onRetry: () =>
                         context.read<RecipesListCubit>().fetchRecipes(sortBy),

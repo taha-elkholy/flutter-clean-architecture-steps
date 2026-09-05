@@ -125,6 +125,16 @@ class S {
     );
   }
 
+  /// `No recipes to show`
+  String get noRecipes {
+    return Intl.message(
+      'No recipes to show',
+      name: 'noRecipes',
+      desc: 'Message shown on the recipe list when a sort comes back with no recipes',
+      args: [],
+    );
+  }
+
   /// `Search recipes...`
   String get searchHint {
     return Intl.message(
@@ -141,6 +151,16 @@ class S {
       'Type a recipe name and hit enter',
       name: 'searchEmptyState',
       desc: 'Message shown on the search page before any search is made',
+      args: [],
+    );
+  }
+
+  /// `No recipes matched your search`
+  String get searchNoResults {
+    return Intl.message(
+      'No recipes matched your search',
+      name: 'searchNoResults',
+      desc: 'Message shown on the search page when a search returns nothing',
       args: [],
     );
   }

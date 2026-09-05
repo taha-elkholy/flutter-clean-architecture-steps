@@ -41,6 +41,11 @@
         "description": "Fake difficulty shown inside the skeleton loading cards"
     },
 
+    "noRecipes": "No recipes to show",
+    "@noRecipes": {
+        "description": "Message shown on the recipe list when a sort comes back with no recipes"
+    },
+
     "searchHint": "Search recipes...",
     "@searchHint": {
         "description": "Hint text of the search field in the search page app bar"
@@ -48,6 +53,10 @@
     "searchEmptyState": "Type a recipe name and hit enter",
     "@searchEmptyState": {
         "description": "Message shown on the search page before any search is made"
+    },
+    "searchNoResults": "No recipes matched your search",
+    "@searchNoResults": {
+        "description": "Message shown on the search page when a search returns nothing"
     },
 
     "recipeMetaWithCalories": "{cuisine} · {difficulty} · {calories} cal",
