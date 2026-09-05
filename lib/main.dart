@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture_steps/generated/l10n.dart';
-import 'package:flutter_clean_architecture_steps/pages/recipe_list_page.dart';
+import 'package:flutter_clean_architecture_steps/router/app_router.dart';
+import 'package:flutter_clean_architecture_steps/router/app_routes.dart';
 import 'package:flutter_clean_architecture_steps/style/app_theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -24,7 +25,8 @@ class RecipesApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-      home: const RecipeListPage(),
+      initialRoute: AppRoutes.recipeList,
+      onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }
 }
