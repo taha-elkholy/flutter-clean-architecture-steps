@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_architecture_steps/extensions/build_context_extensions.dart';
 
 // Bouncing dots loader, used everywhere instead of CircularProgressIndicator.
 class LoadingDots extends StatefulWidget {
@@ -26,7 +27,7 @@ class _LoadingDotsState extends State<LoadingDots>
 
   @override
   Widget build(BuildContext context) {
-    final dotColor = Theme.of(context).colorScheme.primary;
+    final dotColor = context.colorScheme.primary;
 
     return AnimatedBuilder(
       animation: controller,

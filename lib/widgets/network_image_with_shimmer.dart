@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_architecture_steps/extensions/build_context_extensions.dart';
 import 'package:flutter_clean_architecture_steps/widgets/loading_dots.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -23,7 +24,7 @@ class NetworkImageWithShimmer extends StatelessWidget {
     return Container(
       width: width,
       height: height,
-      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      color: context.colorScheme.surfaceContainerHighest,
       child: child == null ? null : Center(child: child),
     );
   }
@@ -43,7 +44,7 @@ class NetworkImageWithShimmer extends StatelessWidget {
           context,
           child: Icon(
             Icons.broken_image_outlined,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            color: context.colorScheme.onSurfaceVariant,
           ),
         );
       },

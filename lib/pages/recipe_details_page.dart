@@ -37,7 +37,7 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final textTheme = context.textTheme;
     final strings = context.strings;
 
     return Scaffold(

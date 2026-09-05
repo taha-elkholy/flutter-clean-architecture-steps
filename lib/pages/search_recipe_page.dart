@@ -72,7 +72,7 @@ class _SearchRecipePageState extends State<SearchRecipePage> {
           ? Center(
               child: Text(
                 strings.searchEmptyState,
-                style: Theme.of(context).textTheme.bodySmall,
+                style: context.textTheme.bodySmall,
               ),
             )
           : Skeletonizer(
