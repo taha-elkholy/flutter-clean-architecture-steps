@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_architecture_steps/generated/l10n.dart';
 import 'package:flutter_clean_architecture_steps/pages/recipe_details_page.dart';
 import 'package:flutter_clean_architecture_steps/widgets/recipe_grid_card.dart';
 import 'package:http/http.dart' as http;
@@ -55,13 +56,15 @@ class _SearchRecipePageState extends State<SearchRecipePage> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = S.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: TextField(
           controller: controller,
           autofocus: true,
-          decoration: const InputDecoration(
-            hintText: 'Search recipes...',
+          decoration: InputDecoration(
+            hintText: strings.searchHint,
             border: InputBorder.none,
           ),
           onSubmitted: search,
@@ -70,7 +73,7 @@ class _SearchRecipePageState extends State<SearchRecipePage> {
       body: !hasSearched
           ? Center(
               child: Text(
-                'Type a recipe name and hit enter',
+                strings.searchEmptyState,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             )

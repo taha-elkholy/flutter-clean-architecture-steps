@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_architecture_steps/generated/l10n.dart';
 import 'package:flutter_clean_architecture_steps/widgets/network_image_with_shimmer.dart';
 
 // Shared card UI for both the home grid and the search grid.
@@ -14,6 +15,7 @@ class RecipeGridCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final strings = S.of(context);
     final tertiaryColor = theme.colorScheme.tertiary;
 
     return GestureDetector(
@@ -77,7 +79,10 @@ class RecipeGridCard extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            '${recipe['cuisine']} · ${recipe['difficulty']}',
+            strings.recipeMeta(
+              recipe['cuisine'] as String,
+              recipe['difficulty'] as String,
+            ),
             style: theme.textTheme.labelSmall,
           ),
         ],
@@ -93,11 +98,14 @@ const recipeGridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
   childAspectRatio: 0.72,
 );
 
+// Uses S.current instead of S.of(context): this is a plain data helper with
+// no BuildContext of its own, and the placeholder is only ever built while
+// the app is already running with a resolved locale.
 dynamic placeholderRecipe(int id) => {
   'id': id,
-  'name': 'Recipe name placeholder',
+  'name': S.current.recipeNamePlaceholder,
   'image': '',
   'rating': 4.5,
-  'cuisine': 'Cuisine',
-  'difficulty': 'Easy',
+  'cuisine': S.current.cuisinePlaceholder,
+  'difficulty': S.current.difficultyPlaceholder,
 };

@@ -1,0 +1,76 @@
+{
+    "@@locale": "en",
+
+    "appTitle": "Recipes",
+    "@appTitle": {
+        "description": "Application title, also shown in the recipe list app bar"
+    },
+
+    "topRated": "Top Rated",
+    "@topRated": {
+        "description": "Recipe list sort chip: highest rated recipes first"
+    },
+    "mostReviewed": "Most Reviewed",
+    "@mostReviewed": {
+        "description": "Recipe list sort chip: most reviewed recipes first"
+    },
+
+    "recipeMeta": "{cuisine} · {difficulty}",
+    "@recipeMeta": {
+        "description": "Meta line under a recipe card: cuisine and difficulty",
+        "placeholders": {
+            "cuisine": {
+                "type": "String"
+            },
+            "difficulty": {
+                "type": "String"
+            }
+        }
+    },
+
+    "recipeNamePlaceholder": "Recipe name placeholder",
+    "@recipeNamePlaceholder": {
+        "description": "Fake recipe name shown inside the skeleton loading cards"
+    },
+    "cuisinePlaceholder": "Cuisine",
+    "@cuisinePlaceholder": {
+        "description": "Fake cuisine shown inside the skeleton loading cards"
+    },
+    "difficultyPlaceholder": "Easy",
+    "@difficultyPlaceholder": {
+        "description": "Fake difficulty shown inside the skeleton loading cards"
+    },
+
+    "searchHint": "Search recipes...",
+    "@searchHint": {
+        "description": "Hint text of the search field in the search page app bar"
+    },
+    "searchEmptyState": "Type a recipe name and hit enter",
+    "@searchEmptyState": {
+        "description": "Message shown on the search page before any search is made"
+    },
+
+    "recipeMetaWithCalories": "{cuisine} · {difficulty} · {calories} cal",
+    "@recipeMetaWithCalories": {
+        "description": "Meta line on the details page: cuisine, difficulty and calories per serving",
+        "placeholders": {
+            "cuisine": {
+                "type": "String"
+            },
+            "difficulty": {
+                "type": "String"
+            },
+            "calories": {
+                "type": "int"
+            }
+        }
+    },
+    "ingredients": "Ingredients",
+    "@ingredients": {
+        "description": "Section title above the ingredients list on the details page"
+    },
+    "instructions": "Instructions",
+    "@instructions": {
+        "description": "Section title above the instructions list on the details page"
+    }
+}
