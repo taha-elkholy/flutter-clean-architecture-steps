@@ -4,10 +4,8 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 /// The recipe grid, used by both the list page and the search page.
 ///
-/// Loading is a state of the grid rather than a separate widget: the skeleton
-/// is the same grid built from fake recipes, so the placeholder always has the
-/// exact shape of the content it stands in for, and the caller never writes a
-/// conditional to choose between the two.
+/// The skeleton is the same grid built from fake recipes, so the placeholder
+/// keeps the exact shape of the content it stands in for.
 class RecipesGrid extends StatelessWidget {
   const RecipesGrid({
     required this.recipes,
@@ -21,12 +19,11 @@ class RecipesGrid extends StatelessWidget {
   final List<dynamic> recipes;
   final void Function(dynamic recipe) onRecipeTap;
 
-  /// While true the grid shows [_placeholderCount] skeleton cards and ignores
-  /// [recipes].
+  /// While true the grid shows skeleton cards, ignores [recipes], and stops
+  /// responding to taps.
   final bool isLoading;
 
-  /// Supplied by the list page to drive pagination; the search page has no
-  /// pagination and leaves it null.
+  /// Drives pagination on the list page; the search page has none.
   final ScrollController? scrollController;
 
   final ScrollPhysics? physics;
@@ -47,7 +44,7 @@ class RecipesGrid extends StatelessWidget {
           final recipe = isLoading ? placeholderRecipe(index) : recipes[index];
           return RecipeGridCard(
             recipe: recipe,
-            onTap: () => onRecipeTap(recipe),
+            onTap: isLoading ? null : () => onRecipeTap(recipe),
           );
         },
       ),

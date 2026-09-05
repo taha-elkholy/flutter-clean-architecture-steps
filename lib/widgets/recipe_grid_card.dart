@@ -8,10 +8,12 @@ import 'package:flutter_clean_architecture_steps/widgets/network_image_with_shim
 // while the fetch logic itself still lives separately in each page's State
 // — that duplication is intentional and left for a later branch.
 class RecipeGridCard extends StatelessWidget {
-  const RecipeGridCard({required this.recipe, required this.onTap, super.key});
+  const RecipeGridCard({required this.recipe, this.onTap, super.key});
 
   final dynamic recipe;
-  final VoidCallback onTap;
+
+  /// Null while the card is a skeleton placeholder, leaving it inert.
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

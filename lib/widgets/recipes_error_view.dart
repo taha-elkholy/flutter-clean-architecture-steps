@@ -3,10 +3,8 @@ import 'package:flutter_clean_architecture_steps/extensions/build_context_extens
 
 /// Shown when a request fails and there is nothing on screen to keep.
 ///
-/// The message is deliberately generic. This app has no error handling yet —
-/// nothing inspects what actually went wrong — so the view is given a retry
-/// callback and no reason to display. A later branch introduces real failure
-/// types, and this is where they will surface.
+/// The message is generic on purpose: this app has no error handling yet, so
+/// there is no reason to display.
 class RecipesErrorView extends StatelessWidget {
   const RecipesErrorView({required this.onRetry, super.key});
 

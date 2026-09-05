@@ -3,8 +3,7 @@ import 'package:flutter_clean_architecture_steps/extensions/build_context_extens
 
 /// The two sort options the recipe list can be ordered by.
 ///
-/// The API takes these as raw `sortBy` values, so the wire name travels with
-/// the option instead of being rebuilt from a switch at the call site.
+/// Each carries its own API value, so call sites never map one to the other.
 enum RecipeSort {
   topRated('rating'),
   mostReviewed('reviewCount');
