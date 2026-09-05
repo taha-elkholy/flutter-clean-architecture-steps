@@ -31,6 +31,9 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "appTitle": MessageLookupByLibrary.simpleMessage("Recipes"),
+    "couldNotLoadMore": MessageLookupByLibrary.simpleMessage(
+      "Could not load more recipes",
+    ),
     "cuisinePlaceholder": MessageLookupByLibrary.simpleMessage("Cuisine"),
     "difficultyPlaceholder": MessageLookupByLibrary.simpleMessage("Easy"),
     "ingredients": MessageLookupByLibrary.simpleMessage("Ingredients"),
@@ -41,6 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "recipeNamePlaceholder": MessageLookupByLibrary.simpleMessage(
       "Recipe name placeholder",
     ),
+    "retry": MessageLookupByLibrary.simpleMessage("Retry"),
     "routeNotFoundMessage": m2,
     "routeNotFoundTitle": MessageLookupByLibrary.simpleMessage(
       "Page not found",
@@ -49,6 +53,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Type a recipe name and hit enter",
     ),
     "searchHint": MessageLookupByLibrary.simpleMessage("Search recipes..."),
+    "somethingWentWrong": MessageLookupByLibrary.simpleMessage(
+      "Something went wrong",
+    ),
     "topRated": MessageLookupByLibrary.simpleMessage("Top Rated"),
   };
 }

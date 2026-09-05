@@ -74,6 +74,19 @@
         "description": "Section title above the instructions list on the details page"
     },
 
+    "somethingWentWrong": "Something went wrong",
+    "@somethingWentWrong": {
+        "description": "Generic error message shown when a request fails. Deliberately says nothing about the cause: this app has no error handling yet, so no real reason is available to show"
+    },
+    "retry": "Retry",
+    "@retry": {
+        "description": "Button that runs the failed request again"
+    },
+    "couldNotLoadMore": "Could not load more recipes",
+    "@couldNotLoadMore": {
+        "description": "Snack bar shown when loading the next page fails while recipes are already on screen"
+    },
+
     "routeNotFoundTitle": "Page not found",
     "@routeNotFoundTitle": {
         "description": "App bar title of the fallback screen shown for an unknown route"

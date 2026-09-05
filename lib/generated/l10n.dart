@@ -179,6 +179,36 @@ class S {
     );
   }
 
+  /// `Something went wrong`
+  String get somethingWentWrong {
+    return Intl.message(
+      'Something went wrong',
+      name: 'somethingWentWrong',
+      desc: 'Generic error message shown when a request fails. Deliberately says nothing about the cause: this app has no error handling yet, so no real reason is available to show',
+      args: [],
+    );
+  }
+
+  /// `Retry`
+  String get retry {
+    return Intl.message(
+      'Retry',
+      name: 'retry',
+      desc: 'Button that runs the failed request again',
+      args: [],
+    );
+  }
+
+  /// `Could not load more recipes`
+  String get couldNotLoadMore {
+    return Intl.message(
+      'Could not load more recipes',
+      name: 'couldNotLoadMore',
+      desc: 'Snack bar shown when loading the next page fails while recipes are already on screen',
+      args: [],
+    );
+  }
+
   /// `Page not found`
   String get routeNotFoundTitle {
     return Intl.message(

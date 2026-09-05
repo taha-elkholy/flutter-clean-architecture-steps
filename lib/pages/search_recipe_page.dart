@@ -4,9 +4,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture_steps/extensions/build_context_extensions.dart';
 import 'package:flutter_clean_architecture_steps/router/app_routes.dart';
-import 'package:flutter_clean_architecture_steps/widgets/recipe_grid_card.dart';
+import 'package:flutter_clean_architecture_steps/widgets/recipes_grid.dart';
 import 'package:http/http.dart' as http;
-import 'package:skeletonizer/skeletonizer.dart';
 
 class SearchRecipePage extends StatefulWidget {
   const SearchRecipePage({super.key});
@@ -75,22 +74,10 @@ class _SearchRecipePageState extends State<SearchRecipePage> {
                 style: context.textTheme.bodySmall,
               ),
             )
-          : Skeletonizer(
-              enabled: isLoading,
-              child: GridView.builder(
-                padding: const EdgeInsets.all(16),
-                gridDelegate: recipeGridDelegate,
-                itemCount: isLoading ? 6 : results.length,
-                itemBuilder: (context, index) {
-                  final recipe = isLoading
-                      ? placeholderRecipe(index)
-                      : results[index];
-                  return RecipeGridCard(
-                    recipe: recipe,
-                    onTap: () => openDetails(recipe),
-                  );
-                },
-              ),
+          : RecipesGrid(
+              recipes: results,
+              onRecipeTap: openDetails,
+              isLoading: isLoading,
             ),
     );
   }

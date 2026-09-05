@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture_steps/extensions/build_context_extensions.dart';
 import 'package:flutter_clean_architecture_steps/router/app_routes.dart';
 import 'package:flutter_clean_architecture_steps/widgets/loading_dots.dart';
-import 'package:flutter_clean_architecture_steps/widgets/recipe_grid_card.dart';
+import 'package:flutter_clean_architecture_steps/widgets/recipes_grid.dart';
+import 'package:flutter_clean_architecture_steps/widgets/sort_tabs.dart';
 import 'package:http/http.dart' as http;
-import 'package:skeletonizer/skeletonizer.dart';
 
 class RecipeListPage extends StatefulWidget {
   const RecipeListPage({super.key});
@@ -23,7 +23,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
   int skip = 0;
   final int limit = 10;
   int total = 0;
-  String sortBy = 'rating';
+  RecipeSort sortBy = RecipeSort.topRated;
   final ScrollController scrollController = ScrollController();
 
   @override
@@ -43,7 +43,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
       isLoading = true;
     });
     final url = Uri.parse(
-      'https://dummyjson.com/recipes?limit=$limit&skip=0&sortBy=$sortBy&order=desc&select=name,image,rating,cuisine,difficulty',
+      'https://dummyjson.com/recipes?limit=$limit&skip=0&sortBy=${sortBy.queryValue}&order=desc&select=name,image,rating,cuisine,difficulty',
     );
     final response = await http.get(url);
     final data = jsonDecode(response.body);
@@ -61,7 +61,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
       isLoadingMore = true;
     });
     final url = Uri.parse(
-      'https://dummyjson.com/recipes?limit=$limit&skip=$skip&sortBy=$sortBy&order=desc&select=name,image,rating,cuisine,difficulty',
+      'https://dummyjson.com/recipes?limit=$limit&skip=$skip&sortBy=${sortBy.queryValue}&order=desc&select=name,image,rating,cuisine,difficulty',
     );
     final response = await http.get(url);
     final data = jsonDecode(response.body);
@@ -74,7 +74,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
 
   Future<void> refresh() async {
     final url = Uri.parse(
-      'https://dummyjson.com/recipes?limit=$limit&skip=0&sortBy=$sortBy&order=desc&select=name,image,rating,cuisine,difficulty',
+      'https://dummyjson.com/recipes?limit=$limit&skip=0&sortBy=${sortBy.queryValue}&order=desc&select=name,image,rating,cuisine,difficulty',
     );
     final response = await http.get(url);
     final data = jsonDecode(response.body);
@@ -85,7 +85,7 @@ class _RecipeListPageState extends State<RecipeListPage> {
     });
   }
 
-  void changeSort(String value) {
+  void changeSort(RecipeSort value) {
     sortBy = value;
     unawaited(fetchRecipes());
   }
@@ -102,7 +102,6 @@ class _RecipeListPageState extends State<RecipeListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.theme;
     final strings = context.strings;
 
     return Scaffold(
@@ -119,83 +118,16 @@ class _RecipeListPageState extends State<RecipeListPage> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () => changeSort('rating'),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: sortBy == 'rating'
-                          ? theme.colorScheme.primary
-                          : Colors.transparent,
-                      border: Border.all(color: theme.colorScheme.outline),
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Text(
-                      strings.topRated,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: sortBy == 'rating'
-                            ? theme.colorScheme.onPrimary
-                            : theme.colorScheme.secondary,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: () => changeSort('reviewCount'),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: sortBy == 'reviewCount'
-                          ? theme.colorScheme.primary
-                          : Colors.transparent,
-                      border: Border.all(color: theme.colorScheme.outline),
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Text(
-                      strings.mostReviewed,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: sortBy == 'reviewCount'
-                            ? theme.colorScheme.onPrimary
-                            : theme.colorScheme.secondary,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          SortTabs(selected: sortBy, onChanged: changeSort),
           Expanded(
             child: RefreshIndicator(
               onRefresh: refresh,
-              child: Skeletonizer(
-                enabled: isLoading,
-                child: GridView.builder(
-                  controller: scrollController,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(16),
-                  gridDelegate: recipeGridDelegate,
-                  itemCount: isLoading ? 6 : recipes.length,
-                  itemBuilder: (context, index) {
-                    final recipe = isLoading
-                        ? placeholderRecipe(index)
-                        : recipes[index];
-                    return RecipeGridCard(
-                      recipe: recipe,
-                      onTap: () => openDetails(recipe),
-                    );
-                  },
-                ),
+              child: RecipesGrid(
+                recipes: recipes,
+                onRecipeTap: openDetails,
+                isLoading: isLoading,
+                scrollController: scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
               ),
             ),
           ),
