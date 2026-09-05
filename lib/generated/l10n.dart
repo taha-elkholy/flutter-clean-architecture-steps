@@ -178,6 +178,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Page not found`
+  String get routeNotFoundTitle {
+    return Intl.message(
+      'Page not found',
+      name: 'routeNotFoundTitle',
+      desc: 'App bar title of the fallback screen shown for an unknown route',
+      args: [],
+    );
+  }
+
+  /// `No screen is registered for "{routeName}".`
+  String routeNotFoundMessage(String routeName) {
+    return Intl.message(
+      'No screen is registered for "$routeName".',
+      name: 'routeNotFoundMessage',
+      desc: 'Body of the fallback screen, naming the route that could not be resolved',
+      args: [routeName],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

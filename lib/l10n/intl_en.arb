@@ -72,5 +72,19 @@
     "instructions": "Instructions",
     "@instructions": {
         "description": "Section title above the instructions list on the details page"
+    },
+
+    "routeNotFoundTitle": "Page not found",
+    "@routeNotFoundTitle": {
+        "description": "App bar title of the fallback screen shown for an unknown route"
+    },
+    "routeNotFoundMessage": "No screen is registered for \"{routeName}\".",
+    "@routeNotFoundMessage": {
+        "description": "Body of the fallback screen, naming the route that could not be resolved",
+        "placeholders": {
+            "routeName": {
+                "type": "String"
+            }
+        }
     }
 }

@@ -2,8 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_architecture_steps/extensions/build_context_extensions.dart';
 import 'package:flutter_clean_architecture_steps/generated/l10n.dart';
-import 'package:flutter_clean_architecture_steps/pages/recipe_details_page.dart';
+import 'package:flutter_clean_architecture_steps/router/app_routes.dart';
 import 'package:flutter_clean_architecture_steps/widgets/recipe_grid_card.dart';
 import 'package:http/http.dart' as http;
 import 'package:skeletonizer/skeletonizer.dart';
@@ -45,11 +46,9 @@ class _SearchRecipePageState extends State<SearchRecipePage> {
   void openDetails(dynamic recipe) {
     if (isLoading) return;
     unawaited(
-      Navigator.push(
-        context,
-        MaterialPageRoute<void>(
-          builder: (context) => RecipeDetailsPage(recipeId: recipe['id']),
-        ),
+      context.push(
+        AppRoutes.recipeDetails,
+        arguments: recipe['id'],
       ),
     );
   }

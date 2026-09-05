@@ -25,6 +25,9 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m1(cuisine, difficulty, calories) =>
       "${cuisine} · ${difficulty} · ${calories} cal";
 
+  static String m2(routeName) =>
+      "No screen is registered for \"${routeName}\".";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "appTitle": MessageLookupByLibrary.simpleMessage("Recipes"),
@@ -37,6 +40,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "recipeMetaWithCalories": m1,
     "recipeNamePlaceholder": MessageLookupByLibrary.simpleMessage(
       "Recipe name placeholder",
+    ),
+    "routeNotFoundMessage": m2,
+    "routeNotFoundTitle": MessageLookupByLibrary.simpleMessage(
+      "Page not found",
     ),
     "searchEmptyState": MessageLookupByLibrary.simpleMessage(
       "Type a recipe name and hit enter",
