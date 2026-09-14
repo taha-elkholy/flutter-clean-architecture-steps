@@ -12,7 +12,6 @@ class RecipesGrid extends StatelessWidget {
     required this.onRecipeTap,
     this.isLoading = false,
     this.scrollController,
-    this.physics,
     super.key,
   });
 
@@ -26,8 +25,6 @@ class RecipesGrid extends StatelessWidget {
   /// Drives pagination on the list page; the search page has none.
   final ScrollController? scrollController;
 
-  final ScrollPhysics? physics;
-
   static const _placeholderCount = 6;
 
   @override
@@ -36,7 +33,9 @@ class RecipesGrid extends StatelessWidget {
       enabled: isLoading,
       child: GridView.builder(
         controller: scrollController,
-        physics: physics,
+        // Always scrollable, so a pull-to-refresh above it works even when the
+        // recipes do not fill the screen.
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(16),
         gridDelegate: recipeGridDelegate,
         itemCount: isLoading ? _placeholderCount : recipes.length,

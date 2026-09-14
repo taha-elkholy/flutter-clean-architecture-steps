@@ -64,7 +64,7 @@ class _RecipeListViewState extends State<RecipeListView> {
 
   void changeSort(RecipeSort value) {
     setState(() => sortBy = value);
-    unawaited(context.read<RecipesListCubit>().fetchRecipes(value));
+    unawaited(context.read<RecipesListCubit>().fetchIfNeeded(value));
   }
 
   void openDetails(dynamic recipe) {
@@ -116,13 +116,11 @@ class _RecipeListViewState extends State<RecipeListView> {
                     recipes: const [],
                     onRecipeTap: openDetails,
                     isLoading: true,
-                    physics: const AlwaysScrollableScrollPhysics(),
                   ),
                   RecipesSortLoaded(:final recipes) => RecipesGrid(
                     recipes: recipes,
                     onRecipeTap: openDetails,
                     scrollController: scrollController,
-                    physics: const AlwaysScrollableScrollPhysics(),
                   ),
                   RecipesSortEmpty() => EmptyView(strings.noRecipes),
                   RecipesSortError() => RecipesErrorView(

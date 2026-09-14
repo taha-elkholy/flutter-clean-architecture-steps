@@ -31,10 +31,18 @@ class RecipesListCubit extends Cubit<RecipesListState> {
     }
   }
 
+  /// Loads [sort] only if it has never been read. This is what the two slots
+  /// buy: switching tabs shows what is already there instead of fetching it
+  /// again.
+  Future<void> fetchIfNeeded(RecipeSort sort) async {
+    if (state.sortOf(sort) is! RecipesSortInitial) return;
+    await fetchRecipes(sort);
+  }
+
   /// Appends the next page to [sort]. Does nothing unless that sort is loaded
   /// with more to read, so the scroll listener can call it freely.
   Future<void> loadMore(RecipeSort sort) async {
-    final current = _stateFor(sort);
+    final current = state.sortOf(sort);
     if (current is! RecipesSortLoaded) return;
     if (!current.hasMore || current.isLoadingMore) return;
 
@@ -101,11 +109,6 @@ class RecipesListCubit extends Cubit<RecipesListState> {
     final response = await _client.get(url);
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
-
-  RecipesSortState _stateFor(RecipeSort sort) => switch (sort) {
-    RecipeSort.topRated => state.topRated,
-    RecipeSort.mostReviewed => state.mostReviewed,
-  };
 
   void _emitFor(RecipeSort sort, RecipesSortState sortState) {
     emit(
