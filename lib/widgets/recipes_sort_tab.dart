@@ -71,10 +71,7 @@ class _RecipesSortTabState extends State<RecipesSortTab> {
           child: RefreshIndicator(
             onRefresh: () =>
                 context.read<RecipesListCubit>().refresh(widget.sort),
-            child: BlocConsumer<RecipesListCubit, RecipesListState>(
-              // Only this tab's slot concerns this builder.
-              buildWhen: (previous, current) =>
-                  previous.sortOf(widget.sort) != current.sortOf(widget.sort),
+            child: BlocListener<RecipesListCubit, RecipesListState>(
               // The failure travels inside the loaded state, so the recipes
               // stay on screen and only the message reacts to it. Fires on
               // the transition, so it shows once rather than on every emit
@@ -84,32 +81,40 @@ class _RecipesSortTabState extends State<RecipesSortTab> {
                   current.sortOf(widget.sort).loadMoreFailed,
               listener: (context, state) =>
                   showToast(context, strings.couldNotLoadMore),
-              builder: (context, state) => switch (state.sortOf(widget.sort)) {
-                RecipesSortInitial() || RecipesSortLoading() => RecipesGrid(
-                  recipes: const [],
-                  onRecipeTap: openDetails,
-                  isLoading: true,
-                ),
-                RecipesSortLoaded(:final recipes) => RecipesGrid(
-                  recipes: recipes,
-                  onRecipeTap: openDetails,
-                  scrollController: scrollController,
-                ),
-                RecipesSortEmpty() => EmptyView(strings.noRecipes),
-                RecipesSortError() => RecipesErrorView(
-                  onRetry: () => context.read<RecipesListCubit>().fetchRecipes(
-                    widget.sort,
+              child:
+                  BlocSelector<
+                    RecipesListCubit,
+                    RecipesListState,
+                    RecipesSortState
+                  >(
+                    // This tab's slot, without the flags the dots own.
+                    selector: (state) => state.sortOf(widget.sort).gridState,
+                    builder: (context, sortState) => switch (sortState) {
+                      RecipesSortInitial() ||
+                      RecipesSortLoading() => RecipesGrid(
+                        recipes: const [],
+                        onRecipeTap: openDetails,
+                        isLoading: true,
+                      ),
+                      RecipesSortLoaded(:final recipes) => RecipesGrid(
+                        recipes: recipes,
+                        onRecipeTap: openDetails,
+                        scrollController: scrollController,
+                      ),
+                      RecipesSortEmpty() => EmptyView(strings.noRecipes),
+                      RecipesSortError() => RecipesErrorView(
+                        onRetry: () => context
+                            .read<RecipesListCubit>()
+                            .fetchRecipes(widget.sort),
+                      ),
+                    },
                   ),
-                ),
-              },
             ),
           ),
         ),
-        BlocBuilder<RecipesListCubit, RecipesListState>(
-          buildWhen: (previous, current) =>
-              previous.sortOf(widget.sort).isLoadingMore !=
-              current.sortOf(widget.sort).isLoadingMore,
-          builder: (context, state) => state.sortOf(widget.sort).isLoadingMore
+        BlocSelector<RecipesListCubit, RecipesListState, bool>(
+          selector: (state) => state.sortOf(widget.sort).isLoadingMore,
+          builder: (context, isLoadingMore) => isLoadingMore
               ? const Padding(
                   padding: EdgeInsets.all(12),
                   child: LoadingDots(),
