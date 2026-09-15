@@ -1,5 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_clean_architecture_steps/error/failure.dart';
 import 'package:flutter_clean_architecture_steps/widgets/sort_tabs.dart';
+
+/// Stands for an argument that was not passed, so null can mean itself.
+const _unset = Object();
 
 /// The state of the recipe list page.
 ///
@@ -44,7 +48,9 @@ sealed class RecipesSortState extends Equatable {
   /// so the page can ask any state without casting.
   bool get isLoadingMore => false;
 
-  bool get loadMoreFailed => false;
+  /// Set when a load-more or a refresh failed with recipes already on screen,
+  /// which shows a message over them rather than replacing them.
+  Failure? get loadMoreFailure => null;
 
   @override
   List<Object?> get props => [];
@@ -67,7 +73,7 @@ class RecipesSortLoaded extends RecipesSortState {
     required this.skip,
     required this.hasMore,
     this.isLoadingMore = false,
-    this.loadMoreFailed = false,
+    this.loadMoreFailure,
   });
 
   final List<dynamic> recipes;
@@ -80,24 +86,26 @@ class RecipesSortLoaded extends RecipesSortState {
   @override
   final bool isLoadingMore;
 
-  /// Set when the next page failed. The recipes on screen stay; the page
-  /// shows a message instead of replacing them.
   @override
-  final bool loadMoreFailed;
+  final Failure? loadMoreFailure;
 
+  /// Passing `loadMoreFailure: null` clears it; leaving it out keeps it.
+  /// `??` cannot tell those apart, so [_unset] marks "not passed".
   RecipesSortLoaded copyWith({
     List<dynamic>? recipes,
     int? skip,
     bool? hasMore,
     bool? isLoadingMore,
-    bool? loadMoreFailed,
+    Object? loadMoreFailure = _unset,
   }) {
     return RecipesSortLoaded(
       recipes: recipes ?? this.recipes,
       skip: skip ?? this.skip,
       hasMore: hasMore ?? this.hasMore,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
-      loadMoreFailed: loadMoreFailed ?? this.loadMoreFailed,
+      loadMoreFailure: loadMoreFailure == _unset
+          ? this.loadMoreFailure
+          : loadMoreFailure as Failure?,
     );
   }
 
@@ -110,7 +118,7 @@ class RecipesSortLoaded extends RecipesSortState {
     skip,
     hasMore,
     isLoadingMore,
-    loadMoreFailed,
+    loadMoreFailure,
   ];
 }
 
@@ -120,10 +128,14 @@ class RecipesSortEmpty extends RecipesSortState {
   const RecipesSortEmpty();
 }
 
-/// The first page failed, so there is nothing to show. It carries no reason:
-/// this app has no error handling yet.
+/// The first page failed, so there is nothing to show.
 class RecipesSortError extends RecipesSortState {
-  const RecipesSortError();
+  const RecipesSortError(this.failure);
+
+  final Failure failure;
+
+  @override
+  List<Object?> get props => [failure];
 }
 
 extension RecipesSortStateX on RecipesSortState {

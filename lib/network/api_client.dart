@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_clean_architecture_steps/network/connectivity_interceptor.dart';
 import 'package:flutter_clean_architecture_steps/network/logging_interceptor.dart';
 
 /// The one way this app talks to the network.
@@ -12,13 +13,18 @@ class ApiClient {
   static const _baseUrl = 'https://dummyjson.com';
   static const _timeout = Duration(seconds: 15);
 
-  final Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: _baseUrl,
-      connectTimeout: _timeout,
-      receiveTimeout: _timeout,
-    ),
-  )..interceptors.add(LoggingInterceptor());
+  final Dio _dio =
+      Dio(
+          BaseOptions(
+            baseUrl: _baseUrl,
+            connectTimeout: _timeout,
+            receiveTimeout: _timeout,
+          ),
+        )
+        ..interceptors.addAll([
+          ConnectivityInterceptor(),
+          LoggingInterceptor(),
+        ]);
 
   /// Reads [path] and returns the decoded body.
   ///

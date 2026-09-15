@@ -72,15 +72,15 @@ class _RecipesSortTabState extends State<RecipesSortTab> {
             onRefresh: () =>
                 context.read<RecipesListCubit>().refresh(widget.sort),
             child: BlocListener<RecipesListCubit, RecipesListState>(
-              // The failure travels inside the loaded state, so the recipes
-              // stay on screen and only the message reacts to it. Fires on
-              // the transition, so it shows once rather than on every emit
-              // while the flag is up.
+              // The failure rides inside the loaded state, so the recipes stay
+              // put. Fires on the transition, so the toast shows once.
               listenWhen: (previous, current) =>
-                  !previous.sortOf(widget.sort).loadMoreFailed &&
-                  current.sortOf(widget.sort).loadMoreFailed,
-              listener: (context, state) =>
-                  showToast(context, strings.couldNotLoadMore),
+                  previous.sortOf(widget.sort).loadMoreFailure == null &&
+                  current.sortOf(widget.sort).loadMoreFailure != null,
+              listener: (context, state) {
+                final failure = state.sortOf(widget.sort).loadMoreFailure;
+                if (failure != null) showToast(context, failure.message);
+              },
               child:
                   BlocSelector<
                     RecipesListCubit,
@@ -102,7 +102,8 @@ class _RecipesSortTabState extends State<RecipesSortTab> {
                         scrollController: scrollController,
                       ),
                       RecipesSortEmpty() => EmptyView(strings.noRecipes),
-                      RecipesSortError() => RecipesErrorView(
+                      RecipesSortError(:final failure) => RecipesErrorView(
+                        failure: failure,
                         onRetry: () => context
                             .read<RecipesListCubit>()
                             .fetchRecipes(widget.sort),

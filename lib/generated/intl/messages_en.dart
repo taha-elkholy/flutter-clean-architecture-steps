@@ -31,15 +31,21 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "appTitle": MessageLookupByLibrary.simpleMessage("Recipes"),
-    "couldNotLoadMore": MessageLookupByLibrary.simpleMessage(
-      "Could not load more recipes",
-    ),
     "cuisinePlaceholder": MessageLookupByLibrary.simpleMessage("Cuisine"),
     "difficultyPlaceholder": MessageLookupByLibrary.simpleMessage("Easy"),
     "ingredients": MessageLookupByLibrary.simpleMessage("Ingredients"),
     "instructions": MessageLookupByLibrary.simpleMessage("Instructions"),
     "mostReviewed": MessageLookupByLibrary.simpleMessage("Most Reviewed"),
+    "noInternetConnectionError": MessageLookupByLibrary.simpleMessage(
+      "No internet connection. Check your network and try again",
+    ),
     "noRecipes": MessageLookupByLibrary.simpleMessage("No recipes to show"),
+    "notFoundError": MessageLookupByLibrary.simpleMessage(
+      "We could not find what you were looking for",
+    ),
+    "parsingError": MessageLookupByLibrary.simpleMessage(
+      "We could not read the response from the server",
+    ),
     "recipeMeta": m0,
     "recipeMetaWithCalories": m1,
     "recipeNamePlaceholder": MessageLookupByLibrary.simpleMessage(
@@ -57,8 +63,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "searchNoResults": MessageLookupByLibrary.simpleMessage(
       "No recipes matched your search",
     ),
+    "serverError": MessageLookupByLibrary.simpleMessage(
+      "The server ran into a problem. Please try again later",
+    ),
     "somethingWentWrong": MessageLookupByLibrary.simpleMessage(
       "Something went wrong",
+    ),
+    "timeoutError": MessageLookupByLibrary.simpleMessage(
+      "The request took too long. Please try again",
     ),
     "topRated": MessageLookupByLibrary.simpleMessage("Top Rated"),
   };

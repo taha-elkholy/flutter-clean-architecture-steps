@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_clean_architecture_steps/error/failure.dart';
 
 /// The state of the search page.
 ///
@@ -36,7 +37,12 @@ class SearchRecipesEmpty extends SearchRecipesState {
   const SearchRecipesEmpty();
 }
 
-/// The search failed. It carries no reason: this app has no error handling yet.
+/// The search failed, carrying what to tell the user.
 class SearchRecipesError extends SearchRecipesState {
-  const SearchRecipesError();
+  const SearchRecipesError(this.failure);
+
+  final Failure failure;
+
+  @override
+  List<Object?> get props => [failure];
 }
