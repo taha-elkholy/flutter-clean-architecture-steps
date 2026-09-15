@@ -1,49 +1,54 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_clean_architecture_steps/cubits/search_recipes/search_recipes_cubit.dart';
+import 'package:flutter_clean_architecture_steps/cubits/search_recipes/search_recipes_state.dart';
 import 'package:flutter_clean_architecture_steps/extensions/build_context_extensions.dart';
 import 'package:flutter_clean_architecture_steps/router/app_routes.dart';
-import 'package:flutter_clean_architecture_steps/widgets/recipe_grid_card.dart';
-import 'package:http/http.dart' as http;
-import 'package:skeletonizer/skeletonizer.dart';
+import 'package:flutter_clean_architecture_steps/widgets/empty_view.dart';
+import 'package:flutter_clean_architecture_steps/widgets/recipes_error_view.dart';
+import 'package:flutter_clean_architecture_steps/widgets/recipes_grid.dart';
 
-class SearchRecipePage extends StatefulWidget {
+/// Owns the search cubit for as long as this screen is on the stack, so the
+/// results die with the page instead of outliving it.
+class SearchRecipePage extends StatelessWidget {
   const SearchRecipePage({super.key});
 
   @override
-  State<SearchRecipePage> createState() => _SearchRecipePageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => SearchRecipesCubit(),
+      child: const SearchRecipeView(),
+    );
+  }
 }
 
-class _SearchRecipePageState extends State<SearchRecipePage> {
+class SearchRecipeView extends StatefulWidget {
+  const SearchRecipeView({super.key});
+
+  @override
+  State<SearchRecipeView> createState() => _SearchRecipeViewState();
+}
+
+/// Stateful only for the text controller. The results live in the cubit.
+class _SearchRecipeViewState extends State<SearchRecipeView> {
   final TextEditingController controller = TextEditingController();
-  List<dynamic> results = [];
-  bool isLoading = false;
-  bool hasSearched = false;
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   // NOTE: search only runs on submit (Enter) for now.
   // Live-as-you-type search needs debouncing, and that's a deliberate
   // problem left for a later branch, not an oversight here.
-  Future<void> search(String query) async {
-    if (query.isEmpty) return;
-    setState(() {
-      isLoading = true;
-      hasSearched = true;
-    });
-
-    final url = Uri.parse(
-      'https://dummyjson.com/recipes/search?q=$query&select=name,image,rating,cuisine,difficulty',
-    );
-    final response = await http.get(url);
-    final data = jsonDecode(response.body);
-    setState(() {
-      results = data['recipes'];
-      isLoading = false;
-    });
+  void search(String query) {
+    unawaited(context.read<SearchRecipesCubit>().search(query));
   }
 
   void openDetails(dynamic recipe) {
-    if (isLoading) return;
     unawaited(
       context.push(
         AppRoutes.recipeDetails,
@@ -68,30 +73,24 @@ class _SearchRecipePageState extends State<SearchRecipePage> {
           onSubmitted: search,
         ),
       ),
-      body: !hasSearched
-          ? Center(
-              child: Text(
-                strings.searchEmptyState,
-                style: context.textTheme.bodySmall,
-              ),
-            )
-          : Skeletonizer(
-              enabled: isLoading,
-              child: GridView.builder(
-                padding: const EdgeInsets.all(16),
-                gridDelegate: recipeGridDelegate,
-                itemCount: isLoading ? 6 : results.length,
-                itemBuilder: (context, index) {
-                  final recipe = isLoading
-                      ? placeholderRecipe(index)
-                      : results[index];
-                  return RecipeGridCard(
-                    recipe: recipe,
-                    onTap: () => openDetails(recipe),
-                  );
-                },
-              ),
-            ),
+      body: BlocBuilder<SearchRecipesCubit, SearchRecipesState>(
+        builder: (context, state) => switch (state) {
+          SearchRecipesInitial() => EmptyView(strings.searchEmptyState),
+          SearchRecipesLoading() => RecipesGrid(
+            recipes: const [],
+            onRecipeTap: openDetails,
+            isLoading: true,
+          ),
+          SearchRecipesLoaded(:final recipes) => RecipesGrid(
+            recipes: recipes,
+            onRecipeTap: openDetails,
+          ),
+          SearchRecipesEmpty() => EmptyView(strings.searchNoResults),
+          SearchRecipesError() => RecipesErrorView(
+            onRetry: () => context.read<SearchRecipesCubit>().retry(),
+          ),
+        },
+      ),
     );
   }
 }

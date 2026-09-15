@@ -1,97 +1,73 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_clean_architecture_steps/cubits/recipes_list/recipes_list_cubit.dart';
+import 'package:flutter_clean_architecture_steps/cubits/recipes_list/recipes_list_state.dart';
 import 'package:flutter_clean_architecture_steps/extensions/build_context_extensions.dart';
+import 'package:flutter_clean_architecture_steps/helpers/toast_helpers.dart';
 import 'package:flutter_clean_architecture_steps/router/app_routes.dart';
+import 'package:flutter_clean_architecture_steps/widgets/empty_view.dart';
 import 'package:flutter_clean_architecture_steps/widgets/loading_dots.dart';
-import 'package:flutter_clean_architecture_steps/widgets/recipe_grid_card.dart';
-import 'package:http/http.dart' as http;
-import 'package:skeletonizer/skeletonizer.dart';
+import 'package:flutter_clean_architecture_steps/widgets/recipes_error_view.dart';
+import 'package:flutter_clean_architecture_steps/widgets/recipes_grid.dart';
+import 'package:flutter_clean_architecture_steps/widgets/sort_tabs.dart';
 
-class RecipeListPage extends StatefulWidget {
+/// Owns the list cubit for as long as this screen is on the stack.
+class RecipeListPage extends StatelessWidget {
   const RecipeListPage({super.key});
 
   @override
-  State<RecipeListPage> createState() => _RecipeListPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) {
+        final cubit = RecipesListCubit();
+        unawaited(cubit.fetchRecipes(RecipeSort.topRated));
+        return cubit;
+      },
+      child: const RecipeListView(),
+    );
+  }
 }
 
-class _RecipeListPageState extends State<RecipeListPage> {
-  List<dynamic> recipes = [];
-  bool isLoading = true;
-  bool isLoadingMore = false;
-  int skip = 0;
-  final int limit = 10;
-  int total = 0;
-  String sortBy = 'rating';
+class RecipeListView extends StatefulWidget {
+  const RecipeListView({super.key});
+
+  @override
+  State<RecipeListView> createState() => _RecipeListViewState();
+}
+
+/// Stateful only for what the widget owns — the scroll controller and the
+/// selected sort. The recipes live in the cubit.
+class _RecipeListViewState extends State<RecipeListView> {
   final ScrollController scrollController = ScrollController();
+  RecipeSort sortBy = RecipeSort.topRated;
 
   @override
   void initState() {
     super.initState();
-    unawaited(fetchRecipes());
-    scrollController.addListener(() {
-      if (scrollController.position.pixels >=
-          scrollController.position.maxScrollExtent - 100) {
-        unawaited(loadMore());
-      }
-    });
+    scrollController.addListener(_onScroll);
   }
 
-  Future<void> fetchRecipes() async {
-    setState(() {
-      isLoading = true;
-    });
-    final url = Uri.parse(
-      'https://dummyjson.com/recipes?limit=$limit&skip=0&sortBy=$sortBy&order=desc&select=name,image,rating,cuisine,difficulty',
-    );
-    final response = await http.get(url);
-    final data = jsonDecode(response.body);
-    setState(() {
-      recipes = data['recipes'];
-      total = data['total'];
-      skip = limit;
-      isLoading = false;
-    });
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
-  Future<void> loadMore() async {
-    if (isLoadingMore || skip >= total) return;
-    setState(() {
-      isLoadingMore = true;
-    });
-    final url = Uri.parse(
-      'https://dummyjson.com/recipes?limit=$limit&skip=$skip&sortBy=$sortBy&order=desc&select=name,image,rating,cuisine,difficulty',
-    );
-    final response = await http.get(url);
-    final data = jsonDecode(response.body);
-    setState(() {
-      recipes.addAll(data['recipes']);
-      skip += limit;
-      isLoadingMore = false;
-    });
+  void _onScroll() {
+    if (scrollController.position.pixels >=
+        scrollController.position.maxScrollExtent - 100) {
+      unawaited(context.read<RecipesListCubit>().loadMore(sortBy));
+    }
   }
 
-  Future<void> refresh() async {
-    final url = Uri.parse(
-      'https://dummyjson.com/recipes?limit=$limit&skip=0&sortBy=$sortBy&order=desc&select=name,image,rating,cuisine,difficulty',
-    );
-    final response = await http.get(url);
-    final data = jsonDecode(response.body);
-    setState(() {
-      recipes = data['recipes'];
-      total = data['total'];
-      skip = limit;
-    });
-  }
-
-  void changeSort(String value) {
-    sortBy = value;
-    unawaited(fetchRecipes());
+  void changeSort(RecipeSort value) {
+    setState(() => sortBy = value);
+    unawaited(context.read<RecipesListCubit>().fetchIfNeeded(value));
   }
 
   void openDetails(dynamic recipe) {
-    if (isLoading) return;
     unawaited(
       context.push(
         AppRoutes.recipeDetails,
@@ -102,7 +78,6 @@ class _RecipeListPageState extends State<RecipeListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.theme;
     final strings = context.strings;
 
     return Scaffold(
@@ -119,88 +94,54 @@ class _RecipeListPageState extends State<RecipeListPage> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () => changeSort('rating'),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: sortBy == 'rating'
-                          ? theme.colorScheme.primary
-                          : Colors.transparent,
-                      border: Border.all(color: theme.colorScheme.outline),
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Text(
-                      strings.topRated,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: sortBy == 'rating'
-                            ? theme.colorScheme.onPrimary
-                            : theme.colorScheme.secondary,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: () => changeSort('reviewCount'),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: sortBy == 'reviewCount'
-                          ? theme.colorScheme.primary
-                          : Colors.transparent,
-                      border: Border.all(color: theme.colorScheme.outline),
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Text(
-                      strings.mostReviewed,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: sortBy == 'reviewCount'
-                            ? theme.colorScheme.onPrimary
-                            : theme.colorScheme.secondary,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          SortTabs(selected: sortBy, onChanged: changeSort),
           Expanded(
             child: RefreshIndicator(
-              onRefresh: refresh,
-              child: Skeletonizer(
-                enabled: isLoading,
-                child: GridView.builder(
-                  controller: scrollController,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(16),
-                  gridDelegate: recipeGridDelegate,
-                  itemCount: isLoading ? 6 : recipes.length,
-                  itemBuilder: (context, index) {
-                    final recipe = isLoading
-                        ? placeholderRecipe(index)
-                        : recipes[index];
-                    return RecipeGridCard(
-                      recipe: recipe,
-                      onTap: () => openDetails(recipe),
-                    );
-                  },
-                ),
+              onRefresh: () => context.read<RecipesListCubit>().refresh(sortBy),
+              child: BlocConsumer<RecipesListCubit, RecipesListState>(
+                // Only the selected sort's slot concerns this builder.
+                buildWhen: (previous, current) =>
+                    previous.sortOf(sortBy) != current.sortOf(sortBy),
+                // The failure travels inside the loaded state, so the recipes
+                // stay on screen and only the message reacts to it. Fires on
+                // the transition, so it shows once rather than on every emit
+                // while the flag is up.
+                listenWhen: (previous, current) =>
+                    !previous.sortOf(sortBy).loadMoreFailed &&
+                    current.sortOf(sortBy).loadMoreFailed,
+                listener: (context, state) =>
+                    showToast(context, strings.couldNotLoadMore),
+                builder: (context, state) => switch (state.sortOf(sortBy)) {
+                  RecipesSortInitial() || RecipesSortLoading() => RecipesGrid(
+                    recipes: const [],
+                    onRecipeTap: openDetails,
+                    isLoading: true,
+                  ),
+                  RecipesSortLoaded(:final recipes) => RecipesGrid(
+                    recipes: recipes,
+                    onRecipeTap: openDetails,
+                    scrollController: scrollController,
+                  ),
+                  RecipesSortEmpty() => EmptyView(strings.noRecipes),
+                  RecipesSortError() => RecipesErrorView(
+                    onRetry: () =>
+                        context.read<RecipesListCubit>().fetchRecipes(sortBy),
+                  ),
+                },
               ),
             ),
           ),
-          if (isLoadingMore)
-            const Padding(padding: EdgeInsets.all(12), child: LoadingDots()),
+          BlocBuilder<RecipesListCubit, RecipesListState>(
+            buildWhen: (previous, current) =>
+                previous.sortOf(sortBy).isLoadingMore !=
+                current.sortOf(sortBy).isLoadingMore,
+            builder: (context, state) => state.sortOf(sortBy).isLoadingMore
+                ? const Padding(
+                    padding: EdgeInsets.all(12),
+                    child: LoadingDots(),
+                  )
+                : const SizedBox.shrink(),
+          ),
         ],
       ),
     );

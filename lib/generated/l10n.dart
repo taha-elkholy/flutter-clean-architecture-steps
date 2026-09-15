@@ -1,7 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -125,6 +124,17 @@ class S {
     );
   }
 
+  /// `No recipes to show`
+  String get noRecipes {
+    return Intl.message(
+      'No recipes to show',
+      name: 'noRecipes',
+      desc:
+          'Message shown on the recipe list when a sort comes back with no recipes',
+      args: [],
+    );
+  }
+
   /// `Search recipes...`
   String get searchHint {
     return Intl.message(
@@ -145,6 +155,16 @@ class S {
     );
   }
 
+  /// `No recipes matched your search`
+  String get searchNoResults {
+    return Intl.message(
+      'No recipes matched your search',
+      name: 'searchNoResults',
+      desc: 'Message shown on the search page when a search returns nothing',
+      args: [],
+    );
+  }
+
   /// `{cuisine} · {difficulty} · {calories} cal`
   String recipeMetaWithCalories(
     String cuisine,
@@ -154,7 +174,8 @@ class S {
     return Intl.message(
       '$cuisine · $difficulty · $calories cal',
       name: 'recipeMetaWithCalories',
-      desc: 'Meta line on the details page: cuisine, difficulty and calories per serving',
+      desc:
+          'Meta line on the details page: cuisine, difficulty and calories per serving',
       args: [cuisine, difficulty, calories],
     );
   }
@@ -179,6 +200,38 @@ class S {
     );
   }
 
+  /// `Something went wrong`
+  String get somethingWentWrong {
+    return Intl.message(
+      'Something went wrong',
+      name: 'somethingWentWrong',
+      desc:
+          'Generic error message shown when a request fails. Deliberately says nothing about the cause: this app has no error handling yet, so no real reason is available to show',
+      args: [],
+    );
+  }
+
+  /// `Retry`
+  String get retry {
+    return Intl.message(
+      'Retry',
+      name: 'retry',
+      desc: 'Button that runs the failed request again',
+      args: [],
+    );
+  }
+
+  /// `Could not load more recipes`
+  String get couldNotLoadMore {
+    return Intl.message(
+      'Could not load more recipes',
+      name: 'couldNotLoadMore',
+      desc:
+          'Snack bar shown when loading the next page fails while recipes are already on screen',
+      args: [],
+    );
+  }
+
   /// `Page not found`
   String get routeNotFoundTitle {
     return Intl.message(
@@ -194,7 +247,8 @@ class S {
     return Intl.message(
       'No screen is registered for "$routeName".',
       name: 'routeNotFoundMessage',
-      desc: 'Body of the fallback screen, naming the route that could not be resolved',
+      desc:
+          'Body of the fallback screen, naming the route that could not be resolved',
       args: [routeName],
     );
   }

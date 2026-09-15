@@ -41,6 +41,11 @@
         "description": "Fake difficulty shown inside the skeleton loading cards"
     },
 
+    "noRecipes": "No recipes to show",
+    "@noRecipes": {
+        "description": "Message shown on the recipe list when a sort comes back with no recipes"
+    },
+
     "searchHint": "Search recipes...",
     "@searchHint": {
         "description": "Hint text of the search field in the search page app bar"
@@ -48,6 +53,10 @@
     "searchEmptyState": "Type a recipe name and hit enter",
     "@searchEmptyState": {
         "description": "Message shown on the search page before any search is made"
+    },
+    "searchNoResults": "No recipes matched your search",
+    "@searchNoResults": {
+        "description": "Message shown on the search page when a search returns nothing"
     },
 
     "recipeMetaWithCalories": "{cuisine} · {difficulty} · {calories} cal",
@@ -72,6 +81,19 @@
     "instructions": "Instructions",
     "@instructions": {
         "description": "Section title above the instructions list on the details page"
+    },
+
+    "somethingWentWrong": "Something went wrong",
+    "@somethingWentWrong": {
+        "description": "Generic error message shown when a request fails. Deliberately says nothing about the cause: this app has no error handling yet, so no real reason is available to show"
+    },
+    "retry": "Retry",
+    "@retry": {
+        "description": "Button that runs the failed request again"
+    },
+    "couldNotLoadMore": "Could not load more recipes",
+    "@couldNotLoadMore": {
+        "description": "Snack bar shown when loading the next page fails while recipes are already on screen"
     },
 
     "routeNotFoundTitle": "Page not found",
