@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_clean_architecture_steps/cubits/base_cubit.dart';
 import 'package:flutter_clean_architecture_steps/cubits/search_recipes/search_recipes_state.dart';
 import 'package:http/http.dart' as http;
 
 /// Owns the search request for as long as the search page is open.
-class SearchRecipesCubit extends Cubit<SearchRecipesState> {
+class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
   SearchRecipesCubit({http.Client? client})
     : _client = client ?? http.Client(),
       _ownsClient = client == null,
