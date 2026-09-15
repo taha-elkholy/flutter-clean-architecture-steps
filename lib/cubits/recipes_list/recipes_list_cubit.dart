@@ -1,22 +1,16 @@
-import 'dart:convert';
-
 import 'package:flutter_clean_architecture_steps/cubits/base_cubit.dart';
 import 'package:flutter_clean_architecture_steps/cubits/recipes_list/recipes_list_state.dart';
+import 'package:flutter_clean_architecture_steps/network/api_client.dart';
 import 'package:flutter_clean_architecture_steps/widgets/sort_tabs.dart';
-import 'package:http/http.dart' as http;
 
 /// Owns the first page, pagination and refresh for each of the two sorts.
 ///
 /// It holds no data: everything the list knows about itself lives in
 /// [RecipesListState].
 class RecipesListCubit extends BaseCubit<RecipesListState> {
-  RecipesListCubit({http.Client? client})
-    : _client = client ?? http.Client(),
-      _ownsClient = client == null,
-      super(const RecipesListState());
+  RecipesListCubit() : super(const RecipesListState());
 
-  final http.Client _client;
-  final bool _ownsClient;
+  final _client = ApiClient();
 
   static const _pageSize = 10;
 
@@ -101,13 +95,16 @@ class RecipesListCubit extends BaseCubit<RecipesListState> {
     required RecipeSort sort,
     required int skip,
   }) async {
-    final url = Uri.parse(
-      'https://dummyjson.com/recipes?limit=$_pageSize&skip=$skip'
-      '&sortBy=${sort.queryValue}&order=desc'
-      '&select=name,image,rating,cuisine,difficulty',
+    return _client.get(
+      '/recipes',
+      queryParameters: {
+        'limit': _pageSize,
+        'skip': skip,
+        'sortBy': sort.queryValue,
+        'order': 'desc',
+        'select': 'name,image,rating,cuisine,difficulty',
+      },
     );
-    final response = await _client.get(url);
-    return jsonDecode(response.body) as Map<String, dynamic>;
   }
 
   void _emitFor(RecipeSort sort, RecipesSortState sortState) {
@@ -121,7 +118,7 @@ class RecipesListCubit extends BaseCubit<RecipesListState> {
 
   @override
   Future<void> close() {
-    if (_ownsClient) _client.close();
+    _client.close();
     return super.close();
   }
 }
