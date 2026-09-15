@@ -1,17 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter_clean_architecture_steps/cubits/base_cubit.dart';
 import 'package:flutter_clean_architecture_steps/cubits/search_recipes/search_recipes_state.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_clean_architecture_steps/network/api_client.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// Owns the search request for as long as the search page is open.
 class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
-  SearchRecipesCubit({http.Client? client})
-    : _client = client ?? http.Client(),
-      _ownsClient = client == null,
-      super(const SearchRecipesInitial()) {
+  SearchRecipesCubit() : super(const SearchRecipesInitial()) {
     // Typing is debounced and deduplicated; a retry skips both, since it is a
     // button rather than a keystroke and repeats a query on purpose. Both end
     // up in the same switchMap, so the two can never race each other.
@@ -26,8 +22,7 @@ class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
             .listen(emit);
   }
 
-  final http.Client _client;
-  final bool _ownsClient;
+  final _client = ApiClient();
 
   static const _debounce = Duration(milliseconds: 400);
 
@@ -61,12 +56,13 @@ class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
     yield const SearchRecipesLoading();
 
     try {
-      final url = Uri.parse(
-        'https://dummyjson.com/recipes/search?q=$query'
-        '&select=name,image,rating,cuisine,difficulty',
+      final data = await _client.get(
+        '/recipes/search',
+        queryParameters: {
+          'q': query,
+          'select': 'name,image,rating,cuisine,difficulty',
+        },
       );
-      final response = await _client.get(url);
-      final data = jsonDecode(response.body) as Map<String, dynamic>;
       final recipes = data['recipes'] as List<dynamic>;
 
       yield recipes.isEmpty
@@ -82,7 +78,7 @@ class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
     await _subscription.cancel();
     await _queries.close();
     await _retries.close();
-    if (_ownsClient) _client.close();
+    _client.close();
     await super.close();
   }
 }
