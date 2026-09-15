@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_clean_architecture_steps/cubits/base_cubit.dart';
 import 'package:flutter_clean_architecture_steps/cubits/recipes_list/recipes_list_state.dart';
 import 'package:flutter_clean_architecture_steps/widgets/sort_tabs.dart';
 import 'package:http/http.dart' as http;
@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 ///
 /// It holds no data: everything the list knows about itself lives in
 /// [RecipesListState].
-class RecipesListCubit extends Cubit<RecipesListState> {
+class RecipesListCubit extends BaseCubit<RecipesListState> {
   RecipesListCubit({http.Client? client})
     : _client = client ?? http.Client(),
       _ownsClient = client == null,

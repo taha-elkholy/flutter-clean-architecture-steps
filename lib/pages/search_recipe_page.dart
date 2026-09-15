@@ -41,11 +41,9 @@ class _SearchRecipeViewState extends State<SearchRecipeView> {
     super.dispose();
   }
 
-  // NOTE: search only runs on submit (Enter) for now.
-  // Live-as-you-type search needs debouncing, and that's a deliberate
-  // problem left for a later branch, not an oversight here.
+  // Every keystroke, straight through: the debounce lives in the cubit.
   void search(String query) {
-    unawaited(context.read<SearchRecipesCubit>().search(query));
+    context.read<SearchRecipesCubit>().queryChanged(query);
   }
 
   void openDetails(dynamic recipe) {
@@ -70,7 +68,7 @@ class _SearchRecipeViewState extends State<SearchRecipeView> {
             hintText: strings.searchHint,
             border: InputBorder.none,
           ),
-          onSubmitted: search,
+          onChanged: search,
         ),
       ),
       body: BlocBuilder<SearchRecipesCubit, SearchRecipesState>(

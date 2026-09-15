@@ -125,3 +125,17 @@ class RecipesSortEmpty extends RecipesSortState {
 class RecipesSortError extends RecipesSortState {
   const RecipesSortError();
 }
+
+extension RecipesSortStateX on RecipesSortState {
+  /// The state as the grid sees it, with the load-more flags dropped.
+  ///
+  /// Those flags belong to the dots below the grid, not to the recipes in it,
+  /// but they sit in the same state and in the same `props`. Selecting this
+  /// instead means flipping one of them compares equal, so the grid is not
+  /// rebuilt with the recipes it already has.
+  RecipesSortState get gridState => switch (this) {
+    RecipesSortLoaded(:final recipes, :final skip, :final hasMore) =>
+      RecipesSortLoaded(recipes: recipes, skip: skip, hasMore: hasMore),
+    _ => this,
+  };
+}
