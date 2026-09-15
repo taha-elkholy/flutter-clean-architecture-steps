@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_clean_architecture_steps/error/failure.dart';
 
 /// The state of the recipe details page.
 ///
@@ -31,8 +32,12 @@ class RecipeDetailsLoaded extends RecipeDetailsState {
   List<Object?> get props => [identityHashCode(recipe)];
 }
 
-/// The request failed. It carries no reason: this app has no error handling
-/// yet.
+/// The request failed, carrying what to tell the user.
 class RecipeDetailsError extends RecipeDetailsState {
-  const RecipeDetailsError();
+  const RecipeDetailsError(this.failure);
+
+  final Failure failure;
+
+  @override
+  List<Object?> get props => [failure];
 }

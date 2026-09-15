@@ -34,7 +34,8 @@ class RecipeDetailsPage extends StatelessWidget {
             RecipeDetailsLoaded(:final recipe) => RecipeDetailsView(
               recipe: recipe,
             ),
-            RecipeDetailsError() => RecipesErrorView(
+            RecipeDetailsError(:final failure) => RecipesErrorView(
+              failure: failure,
               onRetry: () =>
                   context.read<RecipeDetailsCubit>().fetchDetails(recipeId),
             ),

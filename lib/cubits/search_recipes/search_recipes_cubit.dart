@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_clean_architecture_steps/cubits/base_cubit.dart';
 import 'package:flutter_clean_architecture_steps/cubits/search_recipes/search_recipes_state.dart';
+import 'package:flutter_clean_architecture_steps/error/failure.dart';
+import 'package:flutter_clean_architecture_steps/error/map_app_exception.dart';
 import 'package:flutter_clean_architecture_steps/network/api_client.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -68,8 +70,8 @@ class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
       yield recipes.isEmpty
           ? const SearchRecipesEmpty()
           : SearchRecipesLoaded(recipes);
-    } on Object {
-      yield const SearchRecipesError();
+    } on Object catch (error) {
+      yield SearchRecipesError(mapFailure(mapAppException(error)));
     }
   }
 

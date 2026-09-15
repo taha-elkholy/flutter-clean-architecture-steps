@@ -84,7 +84,8 @@ class _SearchRecipeViewState extends State<SearchRecipeView> {
             onRecipeTap: openDetails,
           ),
           SearchRecipesEmpty() => EmptyView(strings.searchNoResults),
-          SearchRecipesError() => RecipesErrorView(
+          SearchRecipesError(:final failure) => RecipesErrorView(
+            failure: failure,
             onRetry: () => context.read<SearchRecipesCubit>().retry(),
           ),
         },

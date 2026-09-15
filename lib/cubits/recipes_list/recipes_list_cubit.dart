@@ -1,5 +1,7 @@
 import 'package:flutter_clean_architecture_steps/cubits/base_cubit.dart';
 import 'package:flutter_clean_architecture_steps/cubits/recipes_list/recipes_list_state.dart';
+import 'package:flutter_clean_architecture_steps/error/failure.dart';
+import 'package:flutter_clean_architecture_steps/error/map_app_exception.dart';
 import 'package:flutter_clean_architecture_steps/network/api_client.dart';
 import 'package:flutter_clean_architecture_steps/widgets/sort_tabs.dart';
 
@@ -20,8 +22,8 @@ class RecipesListCubit extends BaseCubit<RecipesListState> {
 
     try {
       _emitFor(sort, await _firstPage(sort));
-    } on Object {
-      _emitFor(sort, const RecipesSortError());
+    } on Object catch (error) {
+      _emitFor(sort, RecipesSortError(mapFailure(mapAppException(error))));
     }
   }
 
@@ -43,7 +45,7 @@ class RecipesListCubit extends BaseCubit<RecipesListState> {
     // This also clears any previous failure: nothing else has to reset it.
     _emitFor(
       sort,
-      current.copyWith(isLoadingMore: true, loadMoreFailed: false),
+      current.copyWith(isLoadingMore: true, loadMoreFailure: null),
     );
 
     try {
@@ -57,13 +59,17 @@ class RecipesListCubit extends BaseCubit<RecipesListState> {
           skip: skip,
           hasMore: skip < (data['total'] as int),
           isLoadingMore: false,
+          loadMoreFailure: null,
         ),
       );
-    } on Object {
+    } on Object catch (error) {
       // Only the attempt failed; the recipes on screen stay.
       _emitFor(
         sort,
-        current.copyWith(isLoadingMore: false, loadMoreFailed: true),
+        current.copyWith(
+          isLoadingMore: false,
+          loadMoreFailure: mapFailure(mapAppException(error)),
+        ),
       );
     }
   }
@@ -73,8 +79,15 @@ class RecipesListCubit extends BaseCubit<RecipesListState> {
   Future<void> refresh(RecipeSort sort) async {
     try {
       _emitFor(sort, await _firstPage(sort));
-    } on Object {
-      // A failed refresh leaves the list exactly as it was.
+    } on Object catch (error) {
+      // The recipes on screen stay; only a message says the refresh failed.
+      final current = state.sortOf(sort);
+      if (current is! RecipesSortLoaded) return;
+
+      _emitFor(
+        sort,
+        current.copyWith(loadMoreFailure: mapFailure(mapAppException(error))),
+      );
     }
   }
 

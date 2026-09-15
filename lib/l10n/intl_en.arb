@@ -111,10 +111,6 @@
     "@retry": {
         "description": "Button that runs the failed request again"
     },
-    "couldNotLoadMore": "Could not load more recipes",
-    "@couldNotLoadMore": {
-        "description": "Snack bar shown when loading the next page fails while recipes are already on screen"
-    },
 
     "routeNotFoundTitle": "Page not found",
     "@routeNotFoundTitle": {

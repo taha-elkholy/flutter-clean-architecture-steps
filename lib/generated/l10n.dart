@@ -272,17 +272,6 @@ class S {
     );
   }
 
-  /// `Could not load more recipes`
-  String get couldNotLoadMore {
-    return Intl.message(
-      'Could not load more recipes',
-      name: 'couldNotLoadMore',
-      desc:
-          'Snack bar shown when loading the next page fails while recipes are already on screen',
-      args: [],
-    );
-  }
-
   /// `Page not found`
   String get routeNotFoundTitle {
     return Intl.message(

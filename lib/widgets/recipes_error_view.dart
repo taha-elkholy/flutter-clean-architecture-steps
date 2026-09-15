@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_architecture_steps/error/failure.dart';
 import 'package:flutter_clean_architecture_steps/extensions/build_context_extensions.dart';
 
 /// Shown when a request fails and there is nothing on screen to keep.
-///
-/// The message is generic on purpose: this app has no error handling yet, so
-/// there is no reason to display.
 class RecipesErrorView extends StatelessWidget {
-  const RecipesErrorView({required this.onRetry, super.key});
+  const RecipesErrorView({
+    required this.failure,
+    required this.onRetry,
+    super.key,
+  });
+
+  /// The whole failure, not just its message: what is shown for one can grow
+  /// past the text without every call site having to change.
+  final Failure failure;
 
   final VoidCallback onRetry;
 
@@ -28,7 +34,7 @@ class RecipesErrorView extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              strings.somethingWentWrong,
+              failure.message,
               textAlign: TextAlign.center,
               style: theme.textTheme.bodySmall,
             ),
