@@ -85,7 +85,27 @@
 
     "somethingWentWrong": "Something went wrong",
     "@somethingWentWrong": {
-        "description": "Generic error message shown when a request fails. Deliberately says nothing about the cause: this app has no error handling yet, so no real reason is available to show"
+        "description": "Fallback error message, used for any error code with no message of its own"
+    },
+    "noInternetConnectionError": "No internet connection. Check your network and try again",
+    "@noInternetConnectionError": {
+        "description": "Error message shown when the device has no network connection"
+    },
+    "timeoutError": "The request took too long. Please try again",
+    "@timeoutError": {
+        "description": "Error message shown when a request times out"
+    },
+    "notFoundError": "We could not find what you were looking for",
+    "@notFoundError": {
+        "description": "Error message for HTTP 404"
+    },
+    "serverError": "The server ran into a problem. Please try again later",
+    "@serverError": {
+        "description": "Error message for a failing response from the server"
+    },
+    "parsingError": "We could not read the response from the server",
+    "@parsingError": {
+        "description": "Error message shown when the response body is not in the shape the app expects"
     },
     "retry": "Retry",
     "@retry": {

@@ -206,7 +206,58 @@ class S {
       'Something went wrong',
       name: 'somethingWentWrong',
       desc:
-          'Generic error message shown when a request fails. Deliberately says nothing about the cause: this app has no error handling yet, so no real reason is available to show',
+          'Fallback error message, used for any error code with no message of its own',
+      args: [],
+    );
+  }
+
+  /// `No internet connection. Check your network and try again`
+  String get noInternetConnectionError {
+    return Intl.message(
+      'No internet connection. Check your network and try again',
+      name: 'noInternetConnectionError',
+      desc: 'Error message shown when the device has no network connection',
+      args: [],
+    );
+  }
+
+  /// `The request took too long. Please try again`
+  String get timeoutError {
+    return Intl.message(
+      'The request took too long. Please try again',
+      name: 'timeoutError',
+      desc: 'Error message shown when a request times out',
+      args: [],
+    );
+  }
+
+  /// `We could not find what you were looking for`
+  String get notFoundError {
+    return Intl.message(
+      'We could not find what you were looking for',
+      name: 'notFoundError',
+      desc: 'Error message for HTTP 404',
+      args: [],
+    );
+  }
+
+  /// `The server ran into a problem. Please try again later`
+  String get serverError {
+    return Intl.message(
+      'The server ran into a problem. Please try again later',
+      name: 'serverError',
+      desc: 'Error message for a failing response from the server',
+      args: [],
+    );
+  }
+
+  /// `We could not read the response from the server`
+  String get parsingError {
+    return Intl.message(
+      'We could not read the response from the server',
+      name: 'parsingError',
+      desc:
+          'Error message shown when the response body is not in the shape the app expects',
       args: [],
     );
   }
