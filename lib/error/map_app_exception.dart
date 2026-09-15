@@ -4,9 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_clean_architecture_steps/error/app_exception.dart';
 import 'package:flutter_clean_architecture_steps/error/error_codes.dart';
 
-/// Turns anything thrown at the network into a named [AppException].
-///
-/// The only place that knows about Dio: above it, nothing imports the package.
+/// Turns anything thrown at the network into a named [AppException]. The only
+/// place that knows about Dio.
 AppException mapAppException(Object error) {
   return switch (error) {
     final AppException appException => appException,
@@ -36,8 +35,8 @@ AppException _mapDioException(DioException error) {
   };
 }
 
-/// A [ServerException] is only built once a real status code has been read,
-/// which is what keeps its [ServerException.statusCode] non-null everywhere.
+/// Built only once a real status code has been read, which is what keeps
+/// [ServerException.statusCode] non-null everywhere else.
 AppException _mapBadResponse(Response<dynamic>? response) {
   return switch (response?.statusCode) {
     final int statusCode => ServerException(
@@ -53,6 +52,7 @@ AppException _mapBadResponse(Response<dynamic>? response) {
 /// Dio hands back whatever was thrown underneath, so that decides.
 AppException _mapUnderlyingError(Object? error) {
   return switch (error) {
+    final AppException appException => appException,
     final SocketException socketException => _mapSocketException(
       socketException,
     ),
@@ -63,8 +63,8 @@ AppException _mapUnderlyingError(Object? error) {
   };
 }
 
-/// [SocketException.address] is the endpoint the socket reached, so a null one
-/// means the host never resolved — which needs the network, so: offline.
+/// A null [SocketException.address] means no endpoint was ever reached, which
+/// is what being offline looks like. A refusal from one carries its address.
 AppException _mapSocketException(SocketException error) {
   return switch (error.address) {
     null => const GeneralException(

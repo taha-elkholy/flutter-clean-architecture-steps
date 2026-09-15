@@ -18,8 +18,7 @@ Failure mapFailure(AppException exception) {
   return Failure(message: _messageFor(exception.errorCode));
 }
 
-/// An unnamed code falls back to the generic message rather than failing to
-/// build.
+/// An unnamed code falls back to the generic message.
 String _messageFor(String errorCode) {
   return switch (errorCode) {
     ErrorCodes.noInternetConnection => S.current.noInternetConnectionError,

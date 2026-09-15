@@ -10,8 +10,7 @@ class RecipesErrorView extends StatelessWidget {
     super.key,
   });
 
-  /// The whole failure, not just its message: what is shown for one can grow
-  /// past the text without every call site having to change.
+  /// The whole failure, so what is shown can grow past the message.
   final Failure failure;
 
   final VoidCallback onRetry;

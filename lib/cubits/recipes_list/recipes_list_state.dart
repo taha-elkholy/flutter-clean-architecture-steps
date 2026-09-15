@@ -2,8 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_clean_architecture_steps/error/failure.dart';
 import 'package:flutter_clean_architecture_steps/widgets/sort_tabs.dart';
 
-/// Stands for an argument that was not passed, so a `copyWith` can take null
-/// as a value rather than as an absence.
+/// Stands for an argument that was not passed, so null can mean itself.
 const _unset = Object();
 
 /// The state of the recipe list page.
@@ -49,11 +48,8 @@ sealed class RecipesSortState extends Equatable {
   /// so the page can ask any state without casting.
   bool get isLoadingMore => false;
 
-  /// Set when a load-more or a refresh failed while recipes were on screen.
-  ///
-  /// Separate from [RecipesSortError], which is a first page that failed with
-  /// nothing to show: that replaces the screen, this only puts a message over
-  /// the recipes already on it.
+  /// Set when a load-more or a refresh failed with recipes already on screen,
+  /// which shows a message over them rather than replacing them.
   Failure? get loadMoreFailure => null;
 
   @override
@@ -90,14 +86,11 @@ class RecipesSortLoaded extends RecipesSortState {
   @override
   final bool isLoadingMore;
 
-  /// Set when a load-more or a refresh failed. The recipes on screen stay; the
-  /// page shows a message instead of replacing them.
   @override
   final Failure? loadMoreFailure;
 
-  /// Passing `loadMoreFailure: null` clears the failure; leaving it out keeps
-  /// the current one. `??` cannot tell those apart, so [_unset] stands in for
-  /// "not passed" and null keeps its own meaning.
+  /// Passing `loadMoreFailure: null` clears it; leaving it out keeps it.
+  /// `??` cannot tell those apart, so [_unset] marks "not passed".
   RecipesSortLoaded copyWith({
     List<dynamic>? recipes,
     int? skip,
