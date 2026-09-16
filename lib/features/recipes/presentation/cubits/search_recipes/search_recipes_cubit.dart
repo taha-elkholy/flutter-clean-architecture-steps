@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter_clean_architecture_steps/core/base/base_cubit.dart';
-import 'package:flutter_clean_architecture_steps/features/recipes/domain/repositories/recipes_repository.dart';
+import 'package:flutter_clean_architecture_steps/features/recipes/domain/usecases/search_recipes_usecase.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/cubits/search_recipes/search_recipes_state.dart';
 import 'package:rxdart/rxdart.dart';
 
-/// Owns the search request for as long as the search page is open.
 class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
-  SearchRecipesCubit(this._repository) : super(const SearchRecipesInitial()) {
+  SearchRecipesCubit(this._searchRecipes)
+    : super(const SearchRecipesInitial()) {
     // Typing is debounced and deduplicated; a retry skips both, since it is a
     // button rather than a keystroke and repeats a query on purpose. Both end
     // up in the same switchMap, so the two can never race each other.
@@ -22,7 +22,7 @@ class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
             .listen(emit);
   }
 
-  final RecipesRepository _repository;
+  final SearchRecipesUseCase _searchRecipes;
 
   static const _debounce = Duration(milliseconds: 400);
 
@@ -47,6 +47,9 @@ class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
 
   /// One search as a stream, so `switchMap` can cancel it when it is stale.
   Stream<SearchRecipesState> _search(String query) async* {
+    // An empty box is not a search that found nothing: it is no search at all,
+    // so it gets the initial view rather than the empty one. Nothing is asked
+    // for either, which is why no use case has to refuse an empty query.
     if (query.isEmpty) {
       yield const SearchRecipesInitial();
       return;
@@ -55,7 +58,7 @@ class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
     _query = query;
     yield const SearchRecipesLoading();
 
-    final result = await _repository.searchRecipes(query);
+    final result = await _searchRecipes(query);
 
     yield result.fold(
       onSuccess: (page) => page.recipes.isEmpty

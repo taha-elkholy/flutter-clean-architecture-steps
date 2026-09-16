@@ -1,9 +1,8 @@
 import 'package:flutter_clean_architecture_steps/core/base/base_cubit.dart';
 import 'package:flutter_clean_architecture_steps/core/result/result.dart';
-import 'package:flutter_clean_architecture_steps/features/recipes/domain/entities/params/get_recipes_params.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/entities/recipe_sort.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/entities/recipes_page_entity.dart';
-import 'package:flutter_clean_architecture_steps/features/recipes/domain/repositories/recipes_repository.dart';
+import 'package:flutter_clean_architecture_steps/features/recipes/domain/usecases/get_recipe_list_usecase.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/cubits/recipes_list/recipes_list_state.dart';
 
 /// Owns the first page, pagination and refresh for each of the two sorts.
@@ -11,11 +10,9 @@ import 'package:flutter_clean_architecture_steps/features/recipes/presentation/c
 /// It holds no data: everything the list knows about itself lives in
 /// [RecipesListState].
 class RecipesListCubit extends BaseCubit<RecipesListState> {
-  RecipesListCubit(this._repository) : super(const RecipesListState());
+  RecipesListCubit(this._getRecipeList) : super(const RecipesListState());
 
-  final RecipesRepository _repository;
-
-  static const _pageSize = 10;
+  final GetRecipeListUseCase _getRecipeList;
 
   /// Loads the first page of [sort], replacing whatever that slot held.
   Future<void> fetchRecipes(RecipeSort sort) async {
@@ -111,9 +108,7 @@ class RecipesListCubit extends BaseCubit<RecipesListState> {
     required RecipeSort sort,
     required int skip,
   }) {
-    return _repository.getRecipes(
-      GetRecipesParams(sort: sort, skip: skip, limit: _pageSize),
-    );
+    return _getRecipeList(sort: sort, skip: skip);
   }
 
   void _emitFor(RecipeSort sort, RecipesSortState sortState) {

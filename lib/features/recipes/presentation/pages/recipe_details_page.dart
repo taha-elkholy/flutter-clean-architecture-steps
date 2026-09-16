@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_clean_architecture_steps/core/network/api_client.dart';
 import 'package:flutter_clean_architecture_steps/core/widgets/loading_dots.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/data/repositories/recipes_repository_impl.dart';
+import 'package:flutter_clean_architecture_steps/features/recipes/domain/usecases/get_recipe_details_usecase.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/cubits/recipe_details/recipe_details_cubit.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/cubits/recipe_details/recipe_details_state.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/widgets/recipe_details_view.dart';
@@ -37,7 +38,9 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) {
-        final cubit = RecipeDetailsCubit(RecipesRepositoryImpl(client));
+        final cubit = RecipeDetailsCubit(
+          GetRecipeDetailsUseCase(RecipesRepositoryImpl(client)),
+        );
         unawaited(cubit.fetchDetails(widget.recipeId));
         return cubit;
       },

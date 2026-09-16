@@ -8,6 +8,7 @@ import 'package:flutter_clean_architecture_steps/core/router/app_routes.dart';
 import 'package:flutter_clean_architecture_steps/core/widgets/empty_view.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/data/repositories/recipes_repository_impl.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/entities/recipe_entity.dart';
+import 'package:flutter_clean_architecture_steps/features/recipes/domain/usecases/search_recipes_usecase.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/cubits/search_recipes/search_recipes_cubit.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/cubits/search_recipes/search_recipes_state.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/widgets/recipes_error_view.dart';
@@ -37,7 +38,9 @@ class _SearchRecipePageState extends State<SearchRecipePage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SearchRecipesCubit(RecipesRepositoryImpl(client)),
+      create: (_) => SearchRecipesCubit(
+        SearchRecipesUseCase(RecipesRepositoryImpl(client)),
+      ),
       child: const SearchRecipeView(),
     );
   }
