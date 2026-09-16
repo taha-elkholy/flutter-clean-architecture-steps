@@ -7,15 +7,15 @@ sealed class Result<T> {
 
   const factory Result.success(T data) = Success<T>;
 
-  const factory Result.failed(Failure failure) = Failed<T>;
+  const factory Result.failed(Failure failure) = Error<T>;
 
-  R when<R>({
+  R fold<R>({
     required R Function(T data) onSuccess,
     required R Function(Failure failure) onError,
   }) {
     return switch (this) {
       Success(:final data) => onSuccess(data),
-      Failed(:final failure) => onError(failure),
+      Error(:final failure) => onError(failure),
     };
   }
 }
@@ -28,8 +28,8 @@ final class Success<T> extends Result<T> {
 }
 
 @immutable
-final class Failed<T> extends Result<T> {
-  const Failed(this.failure);
+final class Error<T> extends Result<T> {
+  const Error(this.failure);
 
   final Failure failure;
 }
