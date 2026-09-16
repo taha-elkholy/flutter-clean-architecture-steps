@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_clean_architecture_steps/entities/recipe_details_entity.dart';
 import 'package:flutter_clean_architecture_steps/error/failure.dart';
 
 /// The state of the recipe details page.
@@ -23,13 +24,10 @@ class RecipeDetailsLoading extends RecipeDetailsState {
 class RecipeDetailsLoaded extends RecipeDetailsState {
   const RecipeDetailsLoaded(this.recipe);
 
-  final dynamic recipe;
+  final RecipeDetailsEntity recipe;
 
-  // The recipe is an untyped map with no equality of its own, so identity is
-  // all there is to compare. A new fetch always brings a new map. Once it
-  // becomes an entity with real equality, this goes back to being the recipe.
   @override
-  List<Object?> get props => [identityHashCode(recipe)];
+  List<Object?> get props => [recipe];
 }
 
 /// The request failed, carrying what to tell the user.

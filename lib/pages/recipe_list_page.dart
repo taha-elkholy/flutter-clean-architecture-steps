@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_clean_architecture_steps/cubits/recipes_list/recipes_list_cubit.dart';
+import 'package:flutter_clean_architecture_steps/entities/recipe_sort.dart';
 import 'package:flutter_clean_architecture_steps/extensions/build_context_extensions.dart';
+import 'package:flutter_clean_architecture_steps/network/api_client.dart';
+import 'package:flutter_clean_architecture_steps/repositories/recipes_repository_impl.dart';
 import 'package:flutter_clean_architecture_steps/router/app_routes.dart';
 import 'package:flutter_clean_architecture_steps/widgets/recipes_sort_tab.dart';
 import 'package:flutter_clean_architecture_steps/widgets/sort_tabs.dart';
@@ -24,14 +27,24 @@ class RecipeListPage extends StatefulWidget {
 class _RecipeListPageState extends State<RecipeListPage> {
   RecipeSort sortBy = RecipeSort.topRated;
 
+  /// Built here and closed here: the cubit is handed a repository, so closing
+  /// what the request runs on is this page's job.
+  final ApiClient client = ApiClient();
+
   void changeSort(RecipeSort value) => setState(() => sortBy = value);
+
+  @override
+  void dispose() {
+    client.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final strings = context.strings;
 
     return BlocProvider(
-      create: (_) => RecipesListCubit(),
+      create: (_) => RecipesListCubit(RecipesRepositoryImpl(client)),
       child: Scaffold(
         appBar: AppBar(
           title: Text(strings.appTitle),

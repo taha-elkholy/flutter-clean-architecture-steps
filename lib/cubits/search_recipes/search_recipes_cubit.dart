@@ -4,12 +4,12 @@ import 'package:flutter_clean_architecture_steps/cubits/base_cubit.dart';
 import 'package:flutter_clean_architecture_steps/cubits/search_recipes/search_recipes_state.dart';
 import 'package:flutter_clean_architecture_steps/error/failure.dart';
 import 'package:flutter_clean_architecture_steps/error/map_app_exception.dart';
-import 'package:flutter_clean_architecture_steps/network/api_client.dart';
+import 'package:flutter_clean_architecture_steps/repositories/recipes_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// Owns the search request for as long as the search page is open.
 class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
-  SearchRecipesCubit() : super(const SearchRecipesInitial()) {
+  SearchRecipesCubit(this._repository) : super(const SearchRecipesInitial()) {
     // Typing is debounced and deduplicated; a retry skips both, since it is a
     // button rather than a keystroke and repeats a query on purpose. Both end
     // up in the same switchMap, so the two can never race each other.
@@ -24,7 +24,7 @@ class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
             .listen(emit);
   }
 
-  final _client = ApiClient();
+  final RecipesRepository _repository;
 
   static const _debounce = Duration(milliseconds: 400);
 
@@ -58,18 +58,11 @@ class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
     yield const SearchRecipesLoading();
 
     try {
-      final data = await _client.get(
-        '/recipes/search',
-        queryParameters: {
-          'q': query,
-          'select': 'name,image,rating,cuisine,difficulty',
-        },
-      );
-      final recipes = data['recipes'] as List<dynamic>;
+      final page = await _repository.searchRecipes(query);
 
-      yield recipes.isEmpty
+      yield page.recipes.isEmpty
           ? const SearchRecipesEmpty()
-          : SearchRecipesLoaded(recipes);
+          : SearchRecipesLoaded(page.recipes);
     } on Object catch (error) {
       yield SearchRecipesError(mapFailure(mapAppException(error)));
     }
@@ -80,7 +73,6 @@ class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
     await _subscription.cancel();
     await _queries.close();
     await _retries.close();
-    _client.close();
     await super.close();
   }
 }

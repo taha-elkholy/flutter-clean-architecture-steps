@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_architecture_steps/entities/recipe_entity.dart';
 import 'package:flutter_clean_architecture_steps/widgets/recipe_grid_card.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -15,8 +16,8 @@ class RecipesGrid extends StatelessWidget {
     super.key,
   });
 
-  final List<dynamic> recipes;
-  final void Function(dynamic recipe) onRecipeTap;
+  final List<RecipeEntity> recipes;
+  final void Function(RecipeEntity recipe) onRecipeTap;
 
   /// While true the grid shows skeleton cards, ignores [recipes], and stops
   /// responding to taps.

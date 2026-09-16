@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_clean_architecture_steps/entities/recipe_entity.dart';
 import 'package:flutter_clean_architecture_steps/error/failure.dart';
 
 /// The state of the search page.
@@ -23,12 +24,10 @@ class SearchRecipesLoading extends SearchRecipesState {
 class SearchRecipesLoaded extends SearchRecipesState {
   const SearchRecipesLoaded(this.recipes);
 
-  final List<dynamic> recipes;
+  final List<RecipeEntity> recipes;
 
-  // Length is enough to tell two results apart, and the recipes are untyped
-  // maps with no equality of their own.
   @override
-  List<Object?> get props => [recipes.length];
+  List<Object?> get props => [recipes];
 }
 
 /// The search ran and matched nothing. Its own state, so the page never has to
