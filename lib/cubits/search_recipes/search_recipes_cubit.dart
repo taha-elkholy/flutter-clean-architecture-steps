@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:flutter_clean_architecture_steps/cubits/base_cubit.dart';
 import 'package:flutter_clean_architecture_steps/cubits/search_recipes/search_recipes_state.dart';
-import 'package:flutter_clean_architecture_steps/error/failure.dart';
-import 'package:flutter_clean_architecture_steps/error/map_app_exception.dart';
 import 'package:flutter_clean_architecture_steps/repositories/recipes_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -57,15 +55,14 @@ class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
     _query = query;
     yield const SearchRecipesLoading();
 
-    try {
-      final page = await _repository.searchRecipes(query);
+    final result = await _repository.searchRecipes(query);
 
-      yield page.recipes.isEmpty
+    yield result.fold(
+      onSuccess: (page) => page.recipes.isEmpty
           ? const SearchRecipesEmpty()
-          : SearchRecipesLoaded(page.recipes);
-    } on Object catch (error) {
-      yield SearchRecipesError(mapFailure(mapAppException(error)));
-    }
+          : SearchRecipesLoaded(page.recipes),
+      onError: SearchRecipesError.new,
+    );
   }
 
   @override
