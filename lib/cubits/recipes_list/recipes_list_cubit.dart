@@ -1,18 +1,20 @@
 import 'package:flutter_clean_architecture_steps/cubits/base_cubit.dart';
 import 'package:flutter_clean_architecture_steps/cubits/recipes_list/recipes_list_state.dart';
+import 'package:flutter_clean_architecture_steps/entities/params/get_recipes_params.dart';
+import 'package:flutter_clean_architecture_steps/entities/recipe_sort.dart';
+import 'package:flutter_clean_architecture_steps/entities/recipes_page_entity.dart';
 import 'package:flutter_clean_architecture_steps/error/failure.dart';
 import 'package:flutter_clean_architecture_steps/error/map_app_exception.dart';
-import 'package:flutter_clean_architecture_steps/network/api_client.dart';
-import 'package:flutter_clean_architecture_steps/widgets/sort_tabs.dart';
+import 'package:flutter_clean_architecture_steps/repositories/recipes_repository.dart';
 
 /// Owns the first page, pagination and refresh for each of the two sorts.
 ///
 /// It holds no data: everything the list knows about itself lives in
 /// [RecipesListState].
 class RecipesListCubit extends BaseCubit<RecipesListState> {
-  RecipesListCubit() : super(const RecipesListState());
+  RecipesListCubit(this._repository) : super(const RecipesListState());
 
-  final _client = ApiClient();
+  final RecipesRepository _repository;
 
   static const _pageSize = 10;
 
@@ -49,15 +51,14 @@ class RecipesListCubit extends BaseCubit<RecipesListState> {
     );
 
     try {
-      final data = await _getPage(sort: sort, skip: current.skip);
-      final newRecipes = data['recipes'] as List<dynamic>;
-      final skip = current.skip + newRecipes.length;
+      final page = await _getPage(sort: sort, skip: current.skip);
+      final skip = current.skip + page.recipes.length;
       _emitFor(
         sort,
         current.copyWith(
-          recipes: [...current.recipes, ...newRecipes],
+          recipes: [...current.recipes, ...page.recipes],
           skip: skip,
-          hasMore: skip < (data['total'] as int),
+          hasMore: skip < page.total,
           isLoadingMore: false,
           loadMoreFailure: null,
         ),
@@ -93,30 +94,22 @@ class RecipesListCubit extends BaseCubit<RecipesListState> {
 
   /// Reads page one of [sort] and turns it into the state it belongs in.
   Future<RecipesSortState> _firstPage(RecipeSort sort) async {
-    final data = await _getPage(sort: sort, skip: 0);
-    final recipes = data['recipes'] as List<dynamic>;
-    if (recipes.isEmpty) return const RecipesSortEmpty();
+    final page = await _getPage(sort: sort, skip: 0);
+    if (page.recipes.isEmpty) return const RecipesSortEmpty();
 
     return RecipesSortLoaded(
-      recipes: recipes,
-      skip: recipes.length,
-      hasMore: recipes.length < (data['total'] as int),
+      recipes: page.recipes,
+      skip: page.recipes.length,
+      hasMore: page.recipes.length < page.total,
     );
   }
 
-  Future<Map<String, dynamic>> _getPage({
+  Future<RecipesPageEntity> _getPage({
     required RecipeSort sort,
     required int skip,
-  }) async {
-    return _client.get(
-      '/recipes',
-      queryParameters: {
-        'limit': _pageSize,
-        'skip': skip,
-        'sortBy': sort.queryValue,
-        'order': 'desc',
-        'select': 'name,image,rating,cuisine,difficulty',
-      },
+  }) {
+    return _repository.getRecipes(
+      GetRecipesParams(sort: sort, skip: skip, limit: _pageSize),
     );
   }
 
@@ -127,11 +120,5 @@ class RecipesListCubit extends BaseCubit<RecipesListState> {
         RecipeSort.mostReviewed => state.copyWith(mostReviewed: sortState),
       },
     );
-  }
-
-  @override
-  Future<void> close() {
-    _client.close();
-    return super.close();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_architecture_steps/entities/recipe_entity.dart';
 import 'package:flutter_clean_architecture_steps/extensions/build_context_extensions.dart';
 import 'package:flutter_clean_architecture_steps/generated/l10n.dart';
 import 'package:flutter_clean_architecture_steps/widgets/network_image_with_shimmer.dart';
@@ -10,7 +11,7 @@ import 'package:flutter_clean_architecture_steps/widgets/network_image_with_shim
 class RecipeGridCard extends StatelessWidget {
   const RecipeGridCard({required this.recipe, this.onTap, super.key});
 
-  final dynamic recipe;
+  final RecipeEntity recipe;
 
   /// Null while the card is a skeleton placeholder, leaving it inert.
   final VoidCallback? onTap;
@@ -34,7 +35,7 @@ class RecipeGridCard extends StatelessWidget {
                 fit: StackFit.expand,
                 children: [
                   NetworkImageWithShimmer(
-                    imageUrl: recipe['image'] ?? '',
+                    imageUrl: recipe.image,
                     width: double.infinity,
                     height: double.infinity,
                   ),
@@ -60,7 +61,7 @@ class RecipeGridCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 2),
                           Text(
-                            '${recipe['rating']}',
+                            '${recipe.rating}',
                             style: theme.textTheme.labelMedium?.copyWith(
                               color: tertiaryColor,
                             ),
@@ -75,17 +76,14 @@ class RecipeGridCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            recipe['name'],
+            recipe.name,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: theme.textTheme.labelLarge,
           ),
           const SizedBox(height: 2),
           Text(
-            strings.recipeMeta(
-              recipe['cuisine'] as String,
-              recipe['difficulty'] as String,
-            ),
+            strings.recipeMeta(recipe.cuisine, recipe.difficulty),
             style: theme.textTheme.labelSmall,
           ),
         ],
@@ -104,11 +102,11 @@ const recipeGridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
 // Uses S.current instead of S.of(context): this is a plain data helper with
 // no BuildContext of its own, and the placeholder is only ever built while
 // the app is already running with a resolved locale.
-dynamic placeholderRecipe(int id) => {
-  'id': id,
-  'name': S.current.recipeNamePlaceholder,
-  'image': '',
-  'rating': 4.5,
-  'cuisine': S.current.cuisinePlaceholder,
-  'difficulty': S.current.difficultyPlaceholder,
-};
+RecipeEntity placeholderRecipe(int id) => RecipeEntity(
+  id: id,
+  name: S.current.recipeNamePlaceholder,
+  image: '',
+  rating: 4.5,
+  cuisine: S.current.cuisinePlaceholder,
+  difficulty: S.current.difficultyPlaceholder,
+);

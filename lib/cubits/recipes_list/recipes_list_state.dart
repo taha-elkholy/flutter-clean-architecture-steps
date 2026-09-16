@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_clean_architecture_steps/entities/recipe_entity.dart';
+import 'package:flutter_clean_architecture_steps/entities/recipe_sort.dart';
 import 'package:flutter_clean_architecture_steps/error/failure.dart';
-import 'package:flutter_clean_architecture_steps/widgets/sort_tabs.dart';
 
 /// Stands for an argument that was not passed, so null can mean itself.
 const _unset = Object();
@@ -76,7 +77,7 @@ class RecipesSortLoaded extends RecipesSortState {
     this.loadMoreFailure,
   });
 
-  final List<dynamic> recipes;
+  final List<RecipeEntity> recipes;
 
   /// How many recipes have been read so far, sent as the API's `skip`.
   final int skip;
@@ -92,7 +93,7 @@ class RecipesSortLoaded extends RecipesSortState {
   /// Passing `loadMoreFailure: null` clears it; leaving it out keeps it.
   /// `??` cannot tell those apart, so [_unset] marks "not passed".
   RecipesSortLoaded copyWith({
-    List<dynamic>? recipes,
+    List<RecipeEntity>? recipes,
     int? skip,
     bool? hasMore,
     bool? isLoadingMore,
@@ -109,12 +110,9 @@ class RecipesSortLoaded extends RecipesSortState {
     );
   }
 
-  // The list only grows, so its length tells two states apart. Comparing the
-  // recipes would walk them all on every emit, and they are untyped maps with
-  // no equality of their own.
   @override
   List<Object?> get props => [
-    recipes.length,
+    recipes,
     skip,
     hasMore,
     isLoadingMore,

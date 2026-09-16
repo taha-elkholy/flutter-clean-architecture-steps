@@ -4,21 +4,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_clean_architecture_steps/cubits/search_recipes/search_recipes_cubit.dart';
 import 'package:flutter_clean_architecture_steps/cubits/search_recipes/search_recipes_state.dart';
+import 'package:flutter_clean_architecture_steps/entities/recipe_entity.dart';
 import 'package:flutter_clean_architecture_steps/extensions/build_context_extensions.dart';
+import 'package:flutter_clean_architecture_steps/network/api_client.dart';
+import 'package:flutter_clean_architecture_steps/repositories/recipes_repository_impl.dart';
 import 'package:flutter_clean_architecture_steps/router/app_routes.dart';
 import 'package:flutter_clean_architecture_steps/widgets/empty_view.dart';
 import 'package:flutter_clean_architecture_steps/widgets/recipes_error_view.dart';
 import 'package:flutter_clean_architecture_steps/widgets/recipes_grid.dart';
 
-/// Owns the search cubit for as long as this screen is on the stack, so the
-/// results die with the page instead of outliving it.
-class SearchRecipePage extends StatelessWidget {
+/// Builds what the search cubit needs and owns it for as long as this screen
+/// is on the stack.
+///
+/// Stateful only to close the client: the cubit is handed a repository, so
+/// closing what the request runs on is the caller's job.
+class SearchRecipePage extends StatefulWidget {
   const SearchRecipePage({super.key});
+
+  @override
+  State<SearchRecipePage> createState() => _SearchRecipePageState();
+}
+
+class _SearchRecipePageState extends State<SearchRecipePage> {
+  final ApiClient client = ApiClient();
+
+  @override
+  void dispose() {
+    client.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SearchRecipesCubit(),
+      create: (_) => SearchRecipesCubit(RecipesRepositoryImpl(client)),
       child: const SearchRecipeView(),
     );
   }
@@ -46,11 +65,11 @@ class _SearchRecipeViewState extends State<SearchRecipeView> {
     context.read<SearchRecipesCubit>().queryChanged(query);
   }
 
-  void openDetails(dynamic recipe) {
+  void openDetails(RecipeEntity recipe) {
     unawaited(
       context.push(
         AppRoutes.recipeDetails,
-        arguments: recipe['id'],
+        arguments: recipe.id,
       ),
     );
   }
