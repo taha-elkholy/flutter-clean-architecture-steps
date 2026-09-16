@@ -7,6 +7,7 @@ import 'package:flutter_clean_architecture_steps/core/network/api_client.dart';
 import 'package:flutter_clean_architecture_steps/core/router/app_routes.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/data/repositories/recipes_repository_impl.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/entities/recipe_sort.dart';
+import 'package:flutter_clean_architecture_steps/features/recipes/domain/usecases/get_recipe_list_usecase.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/cubits/recipes_list/recipes_list_cubit.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/widgets/recipes_sort_tab.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/widgets/sort_tabs.dart';
@@ -44,7 +45,8 @@ class _RecipeListPageState extends State<RecipeListPage> {
     final strings = context.strings;
 
     return BlocProvider(
-      create: (_) => RecipesListCubit(RecipesRepositoryImpl(client)),
+      create: (_) =>
+          RecipesListCubit(GetRecipeListUseCase(RecipesRepositoryImpl(client))),
       child: Scaffold(
         appBar: AppBar(
           title: Text(strings.appTitle),
