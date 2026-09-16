@@ -2,8 +2,7 @@ import 'package:equatable/equatable.dart';
 
 /// One recipe as the app uses it: nothing nullable, so no screen has to ask.
 ///
-/// The gaps the server may leave are filled on the way in, not read around
-/// here.
+/// The gaps the server may leave are filled on the way in.
 class RecipeEntity extends Equatable {
   const RecipeEntity({
     required this.id,

@@ -1,10 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 /// The full recipe as the details page uses it.
-///
-/// Separate from the list entity rather than an extension of it, because the
-/// two come from different endpoints and neither is a subset the other can
-/// stand in for.
 class RecipeDetailsEntity extends Equatable {
   const RecipeDetailsEntity({
     required this.id,
