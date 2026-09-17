@@ -58,9 +58,9 @@ class RecipesLocalDataSourceImpl implements RecipesLocalDataSource {
 
       await _database.transaction(() async {
         if (replace) {
-          await (_database.delete(_database.cachedRecipes)
-                ..where((row) => row.sort.equals(sort.queryValue)))
-              .go();
+          await (_database.delete(
+            _database.cachedRecipes,
+          )..where((row) => row.sort.equals(sort.queryValue))).go();
         }
 
         await _database.batch(
