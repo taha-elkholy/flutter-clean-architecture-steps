@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_clean_architecture_steps/core/di/service_locator.dart';
 import 'package:flutter_clean_architecture_steps/core/extensions/build_context_extensions.dart';
 import 'package:flutter_clean_architecture_steps/core/router/app_router.dart';
 import 'package:flutter_clean_architecture_steps/core/router/app_routes.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_clean_architecture_steps/generated/l10n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
+  setupServiceLocator();
   runApp(const RecipesApp());
 }
 

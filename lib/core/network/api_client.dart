@@ -41,8 +41,4 @@ class ApiClient {
 
     return response.data ?? const {};
   }
-
-  /// Drops the connections this client holds open. Only whoever built this
-  /// client may call it: any request after it throws.
-  void close() => _dio.close();
 }

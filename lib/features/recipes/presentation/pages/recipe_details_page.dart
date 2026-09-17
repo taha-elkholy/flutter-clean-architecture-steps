@@ -2,54 +2,30 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_clean_architecture_steps/core/cache/cache_database.dart';
-import 'package:flutter_clean_architecture_steps/core/network/api_client.dart';
+import 'package:flutter_clean_architecture_steps/core/di/service_locator.dart';
 import 'package:flutter_clean_architecture_steps/core/widgets/loading_dots.dart';
-import 'package:flutter_clean_architecture_steps/features/recipes/data/datasources/recipes_local_data_source.dart';
-import 'package:flutter_clean_architecture_steps/features/recipes/data/datasources/recipes_remote_data_source.dart';
-import 'package:flutter_clean_architecture_steps/features/recipes/data/repositories/recipes_repository_impl.dart';
-import 'package:flutter_clean_architecture_steps/features/recipes/domain/usecases/get_recipe_details_usecase.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/cubits/recipe_details/recipe_details_cubit.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/cubits/recipe_details/recipe_details_state.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/widgets/recipe_details_view.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/widgets/recipes_error_view.dart';
 
-/// Builds what the details cubit needs and owns it for as long as this screen
-/// is on the stack.
+/// Takes the details cubit from the locator and owns it for as long as this
+/// screen is on the stack.
 ///
-/// Stateful only to close the client: the cubit is handed a repository, so
-/// closing what the request runs on is the caller's job.
-class RecipeDetailsPage extends StatefulWidget {
+/// The recipe id reaches the cubit through [RecipeDetailsCubit.fetchDetails]
+/// rather than its constructor, so the locator can hand out a cubit that knows
+/// nothing about which recipe it is about to read.
+class RecipeDetailsPage extends StatelessWidget {
   const RecipeDetailsPage({required this.recipeId, super.key});
 
   final int recipeId;
 
   @override
-  State<RecipeDetailsPage> createState() => _RecipeDetailsPageState();
-}
-
-class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
-  final ApiClient client = ApiClient();
-
-  @override
-  void dispose() {
-    client.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) {
-        final cubit = RecipeDetailsCubit(
-          GetRecipeDetailsUseCase(
-            RecipesRepositoryImpl(
-              RecipesRemoteDataSourceImpl(client),
-              RecipesLocalDataSourceImpl(CacheDatabase.instance),
-            ),
-          ),
-        );
-        unawaited(cubit.fetchDetails(widget.recipeId));
+        final cubit = getIt<RecipeDetailsCubit>();
+        unawaited(cubit.fetchDetails(recipeId));
         return cubit;
       },
       child: Scaffold(
@@ -63,9 +39,8 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
             ),
             RecipeDetailsError(:final failure) => RecipesErrorView(
               failure: failure,
-              onRetry: () => context.read<RecipeDetailsCubit>().fetchDetails(
-                widget.recipeId,
-              ),
+              onRetry: () =>
+                  context.read<RecipeDetailsCubit>().fetchDetails(recipeId),
             ),
           },
         ),
