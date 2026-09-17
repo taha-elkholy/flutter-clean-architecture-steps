@@ -1,5 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
+// The generated part is compiled against this file's imports alone, and it
+// names the converter the details table maps through.
+import 'package:flutter_clean_architecture_steps/core/cache/converters/string_list_converter.dart';
 import 'package:flutter_clean_architecture_steps/core/cache/tables/cached_recipe_details_table.dart';
 import 'package:flutter_clean_architecture_steps/core/cache/tables/cached_recipes_table.dart';
 

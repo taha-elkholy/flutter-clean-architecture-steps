@@ -6,7 +6,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 // Shared image widget. Shows a shimmering placeholder while the image is
 // downloading and a broken-image box if it fails. What it downloads is kept
-// and capped in width, so scrolling back to a card neither refetches the
+// and capped in width, so scrolling back to a card neither re-fetches the
 // image nor holds a photo far larger than the screen can show.
 class NetworkImageWithShimmer extends StatelessWidget {
   const NetworkImageWithShimmer({
