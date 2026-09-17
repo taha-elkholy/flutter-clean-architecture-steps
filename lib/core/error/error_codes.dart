@@ -5,5 +5,6 @@ abstract final class ErrorCodes {
   static const notFound = 'NOT_FOUND';
   static const serverError = 'SERVER_ERROR';
   static const parsingError = 'PARSING_ERROR';
+  static const cacheError = 'CACHE_ERROR';
   static const unknown = 'UNKNOWN';
 }

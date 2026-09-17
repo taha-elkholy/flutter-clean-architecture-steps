@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_clean_architecture_steps/core/cache/cache_database.dart';
 import 'package:flutter_clean_architecture_steps/core/network/api_client.dart';
 import 'package:flutter_clean_architecture_steps/core/widgets/loading_dots.dart';
+import 'package:flutter_clean_architecture_steps/features/recipes/data/datasources/recipes_local_data_source.dart';
+import 'package:flutter_clean_architecture_steps/features/recipes/data/datasources/recipes_remote_data_source.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/data/repositories/recipes_repository_impl.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/usecases/get_recipe_details_usecase.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/cubits/recipe_details/recipe_details_cubit.dart';
@@ -39,7 +42,12 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
     return BlocProvider(
       create: (_) {
         final cubit = RecipeDetailsCubit(
-          GetRecipeDetailsUseCase(RecipesRepositoryImpl(client)),
+          GetRecipeDetailsUseCase(
+            RecipesRepositoryImpl(
+              RecipesRemoteDataSourceImpl(client),
+              RecipesLocalDataSourceImpl(CacheDatabase.instance),
+            ),
+          ),
         );
         unawaited(cubit.fetchDetails(widget.recipeId));
         return cubit;
@@ -55,9 +63,9 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
             ),
             RecipeDetailsError(:final failure) => RecipesErrorView(
               failure: failure,
-              onRetry: () => context
-                  .read<RecipeDetailsCubit>()
-                  .fetchDetails(widget.recipeId),
+              onRetry: () => context.read<RecipeDetailsCubit>().fetchDetails(
+                widget.recipeId,
+              ),
             ),
           },
         ),
