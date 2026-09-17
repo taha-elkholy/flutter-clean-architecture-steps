@@ -7,7 +7,13 @@ part 'cache_database.g.dart';
 
 @DriftDatabase(tables: [CachedRecipes, CachedRecipeDetails])
 class CacheDatabase extends _$CacheDatabase {
-  CacheDatabase() : super(driftDatabase(name: _fileName));
+  CacheDatabase._() : super(driftDatabase(name: _fileName));
+
+  /// One connection for the whole app: a second one opened on the same file
+  /// would not see what the first has written.
+  ///
+  /// Static until a branch arrives that hands dependencies out properly.
+  static final CacheDatabase instance = CacheDatabase._();
 
   static const _fileName = 'recipes_cache';
 
