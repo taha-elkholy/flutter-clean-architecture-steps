@@ -2,53 +2,25 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_clean_architecture_steps/core/cache/cache_database.dart';
+import 'package:flutter_clean_architecture_steps/core/di/service_locator.dart';
 import 'package:flutter_clean_architecture_steps/core/extensions/build_context_extensions.dart';
-import 'package:flutter_clean_architecture_steps/core/network/api_client.dart';
 import 'package:flutter_clean_architecture_steps/core/router/app_routes.dart';
 import 'package:flutter_clean_architecture_steps/core/widgets/empty_view.dart';
-import 'package:flutter_clean_architecture_steps/features/recipes/data/datasources/recipes_local_data_source.dart';
-import 'package:flutter_clean_architecture_steps/features/recipes/data/datasources/recipes_remote_data_source.dart';
-import 'package:flutter_clean_architecture_steps/features/recipes/data/repositories/recipes_repository_impl.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/entities/recipe_entity.dart';
-import 'package:flutter_clean_architecture_steps/features/recipes/domain/usecases/search_recipes_usecase.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/cubits/search_recipes/search_recipes_cubit.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/cubits/search_recipes/search_recipes_state.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/widgets/recipes_error_view.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/widgets/recipes_grid.dart';
 
-/// Builds what the search cubit needs and owns it for as long as this screen
-/// is on the stack.
-///
-/// Stateful only to close the client: the cubit is handed a repository, so
-/// closing what the request runs on is the caller's job.
-class SearchRecipePage extends StatefulWidget {
+/// Takes the search cubit from the locator and owns it for as long as this
+/// screen is on the stack.
+class SearchRecipePage extends StatelessWidget {
   const SearchRecipePage({super.key});
-
-  @override
-  State<SearchRecipePage> createState() => _SearchRecipePageState();
-}
-
-class _SearchRecipePageState extends State<SearchRecipePage> {
-  final ApiClient client = ApiClient();
-
-  @override
-  void dispose() {
-    client.close();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SearchRecipesCubit(
-        SearchRecipesUseCase(
-          RecipesRepositoryImpl(
-            RecipesRemoteDataSourceImpl(client),
-            RecipesLocalDataSourceImpl(CacheDatabase.instance),
-          ),
-        ),
-      ),
+      create: (_) => getIt<SearchRecipesCubit>(),
       child: const SearchRecipeView(),
     );
   }

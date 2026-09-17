@@ -2,15 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_clean_architecture_steps/core/cache/cache_database.dart';
+import 'package:flutter_clean_architecture_steps/core/di/service_locator.dart';
 import 'package:flutter_clean_architecture_steps/core/extensions/build_context_extensions.dart';
-import 'package:flutter_clean_architecture_steps/core/network/api_client.dart';
 import 'package:flutter_clean_architecture_steps/core/router/app_routes.dart';
-import 'package:flutter_clean_architecture_steps/features/recipes/data/datasources/recipes_local_data_source.dart';
-import 'package:flutter_clean_architecture_steps/features/recipes/data/datasources/recipes_remote_data_source.dart';
-import 'package:flutter_clean_architecture_steps/features/recipes/data/repositories/recipes_repository_impl.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/entities/recipe_sort.dart';
-import 'package:flutter_clean_architecture_steps/features/recipes/domain/usecases/get_recipe_list_usecase.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/cubits/recipes_list/recipes_list_cubit.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/widgets/recipes_sort_tab.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/widgets/sort_tabs.dart';
@@ -26,36 +21,19 @@ class RecipeListPage extends StatefulWidget {
   State<RecipeListPage> createState() => _RecipeListPageState();
 }
 
-/// Stateful only for the selected sort. Each tab keeps its own scroll position
+/// Stateful for the selected sort alone. Each tab keeps its own scroll position
 /// and reads its own slot; this page only decides which one is on top.
 class _RecipeListPageState extends State<RecipeListPage> {
   RecipeSort sortBy = RecipeSort.topRated;
 
-  /// Built here and closed here: the cubit is handed a repository, so closing
-  /// what the request runs on is this page's job.
-  final ApiClient client = ApiClient();
-
   void changeSort(RecipeSort value) => setState(() => sortBy = value);
-
-  @override
-  void dispose() {
-    client.close();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final strings = context.strings;
 
     return BlocProvider(
-      create: (_) => RecipesListCubit(
-        GetRecipeListUseCase(
-          RecipesRepositoryImpl(
-            RecipesRemoteDataSourceImpl(client),
-            RecipesLocalDataSourceImpl(CacheDatabase.instance),
-          ),
-        ),
-      ),
+      create: (_) => getIt<RecipesListCubit>(),
       child: Scaffold(
         appBar: AppBar(
           title: Text(strings.appTitle),
