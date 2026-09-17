@@ -6,8 +6,8 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter&logoColor=white" alt="Flutter"/>
-  <img src="https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart&logoColor=white" alt="Dart"/>
+  <img src="https://img.shields.io/badge/Flutter-3.47.2%2B-02569B?logo=flutter&logoColor=white" alt="Flutter"/>
+  <img src="https://img.shields.io/badge/Dart-3.12%2B-0175C2?logo=dart&logoColor=white" alt="Dart"/>
   <img src="https://img.shields.io/badge/platforms-iOS%20%7C%20Android-lightgrey" alt="Platforms"/>
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License"/>
 </p>
@@ -35,12 +35,12 @@ screens look the same as they did on day one — that's the point:
 architecture isn't what the user sees, it's what the next developer
 inherits.
 
-The exceptions are the few places where structure buys real behavior, and
-each one is named in its own branch's write-up: the app now answers from a
-local cache when the network is gone, keeps both sort tabs alive instead of
-rebuilding them, searches as you type instead of on submit, caches recipe
-images to disk, and tells you *what* failed instead of "Something went
-wrong".
+The exceptions are the few places where structure buys real behavior,
+and each one is named in its own branch's write-up: the app now answers
+from a local cache when the network is gone, keeps both sort tabs alive
+instead of rebuilding them, searches as you type instead of on submit,
+caches recipe images to disk, and tells you _what_ failed instead of
+"Something went wrong".
 
 ## How to use this repo
 
@@ -68,60 +68,66 @@ Then for each branch:
 Every branch carries the docs for itself and everything before it, so
 whatever branch you're on, the folder reads as the story so far.
 
-| Where | What you'll find |
-|---|---|
-| `main` | Latest state of the app |
+Each write-up describes the repo as it was at that branch, and it isn't
+rewritten when a later branch moves or renames files. So a file path in
+an early write-up may not exist anymore — that's expected. `main` is the
+only place to look for where something lives today.
+
+| Where                    | What you'll find                           |
+| ------------------------ | ------------------------------------------ |
+| `main`                   | Latest state of the app                    |
 | `00-initial-dirty-state` | The original messy version, frozen forever |
-| `docs/` | One markdown file per step, with resources |
+| `docs/`                  | One markdown file per step, with resources |
 
 ## The steps
 
 Each row is a branch and a `docs/` file. Read them in order — every one
 picks up a problem the one before it left behind.
 
-| # | Branch | The problem it solves |
-|---|---|---|
-| 00 | `initial-dirty-state` | The starting point: one file, no structure |
-| 01 | `very-good-analysis` | Default lints are too loose to catch drift |
-| 02 | `split-pages-and-widgets` | Every screen and widget in one `main.dart` |
-| 03 | `widget-classes-not-builders` | A function returning a `Widget` isn't a widget |
-| 04 | `theming` | Hardcoded colors and inline `TextStyle`s everywhere |
-| 05 | `localization` | User-facing strings buried in the widgets that draw them |
-| 06 | `router` | `Navigator.push` building destinations by hand |
-| 07 | `context-extensions` | Every widget naming the machinery before the value |
-| 08 | `state-management-cubit` | Screens owning their own data and loose booleans |
-| 09 | `cubit-enhancements` | `emit` after close, lost scroll, search on submit |
-| 10 | `dio-interceptors` | The cubit owns the request, and `http` has no hooks |
-| 11 | `exceptions-and-failures` | Every error says the same thing |
-| 12 | `models-entities-and-repository` | Untyped maps and magic string keys |
-| 13 | `result-pattern` | Nothing in the signature says the call can fail |
-| 14 | `clean-architecture-structure` | Filed by file type, so the layers are invisible |
-| 15 | `use-cases` | Business rules living inside cubits |
-| 16 | `data-sources-and-caching` | One class doing three jobs, and no offline story |
-| 17 | `dependency-injection-getit` | Every page building six constructors deep |
-| 18 | `dependency-injection-injectable` | The container repeating what constructors already say |
-| 19 | `review-and-cleanup` | A pass back over all of it |
+| #   | Branch                            | The problem it solves                                    |
+| --- | --------------------------------- | -------------------------------------------------------- |
+| 00  | `initial-dirty-state`             | The starting point: one file, no structure               |
+| 01  | `very-good-analysis`              | Default lints are too loose to catch drift               |
+| 02  | `split-pages-and-widgets`         | Every screen and widget in one `main.dart`               |
+| 03  | `widget-classes-not-builders`     | A function returning a `Widget` isn't a widget           |
+| 04  | `theming`                         | Hardcoded colors and inline `TextStyle`s everywhere      |
+| 05  | `localization`                    | User-facing strings buried in the widgets that draw them |
+| 06  | `router`                          | `Navigator.push` building destinations by hand           |
+| 07  | `context-extensions`              | Every widget naming the machinery before the value       |
+| 08  | `state-management-cubit`          | Screens owning their own data and loose booleans         |
+| 09  | `cubit-enhancements`              | `emit` after close, lost scroll, search on submit        |
+| 10  | `dio-interceptors`                | The cubit owns the request, and `http` has no hooks      |
+| 11  | `exceptions-and-failures`         | Every error says the same thing                          |
+| 12  | `models-entities-and-repository`  | Untyped maps and magic string keys                       |
+| 13  | `result-pattern`                  | Nothing in the signature says the call can fail          |
+| 14  | `clean-architecture-structure`    | Filed by file type, so the layers are invisible          |
+| 15  | `use-cases`                       | Business rules living inside cubits                      |
+| 16  | `data-sources-and-caching`        | One class doing three jobs, and no offline story         |
+| 17  | `dependency-injection-getit`      | Every page building six constructors deep                |
+| 18  | `dependency-injection-injectable` | The container repeating what constructors already say    |
+| 19  | `review-and-cleanup`              | A pass back over all of it                               |
 
 ## Tech stack
 
 Where it ends up, and which branch introduces each piece:
 
-| Layer | What's used |
-|---|---|
-| **Architecture** | Clean Architecture — `data` / `domain` / `presentation` per feature, shared code in `core/` (14) |
-| **State** | `flutter_bloc` Cubits over sealed states, `rxdart` for the search stream (08, 09) |
-| **Networking** | `dio` with connectivity and logging interceptors (10) |
-| **Error handling** | Sealed `AppException` → `Failure`, returned as a sealed `Result<T>` (11, 13) |
-| **Local cache** | `drift` over SQLite, plus `cached_network_image` for photos (16) |
-| **DI** | `get_it` + `injectable` code generation (17, 18) |
-| **UI** | Material 3 `ColorScheme` / `TextTheme`, `skeletonizer` loading (04) |
-| **Strings** | `intl` ARB files through a generated `S` class (05) |
-| **Lints** | `very_good_analysis` (01) |
+| Layer              | What's used                                                                                      |
+| ------------------ | ------------------------------------------------------------------------------------------------ |
+| **Architecture**   | Clean Architecture — `data` / `domain` / `presentation` per feature, shared code in `core/` (14) |
+| **State**          | `flutter_bloc` Cubits over sealed states, `rxdart` for the search stream (08, 09)                |
+| **Networking**     | `dio` with connectivity and logging interceptors (10)                                            |
+| **Error handling** | Sealed `AppException` → `Failure`, returned as a sealed `Result<T>` (11, 13)                     |
+| **Local cache**    | `drift` over SQLite, plus `cached_network_image` for photos (16)                                 |
+| **DI**             | `get_it` + `injectable` code generation (17, 18)                                                 |
+| **UI**             | Material 3 `ColorScheme` / `TextTheme`, `skeletonizer` loading (04)                              |
+| **Strings**        | `intl` ARB files through a generated `S` class (05)                                              |
+| **Lints**          | `very_good_analysis` (01)                                                                        |
 
 ## The app
 
-A recipes browser built on the free [DummyJSON Recipes API](https://dummyjson.com/docs/recipes)
-— no API key, no signup, clone and run.
+A recipes browser built on the free
+[DummyJSON Recipes API](https://dummyjson.com/docs/recipes) — no API
+key, no signup, clone and run.
 
 - Paginated grid with `limit` / `skip`
 - Sorting toggle (Top Rated / Most Reviewed), both tabs kept alive
@@ -151,14 +157,14 @@ endpoint and runs as soon as it builds. iOS and Android both.
 
 **If you fork it**, that's everything. Nothing else is configured.
 
-Two things in `lib/` are generated and already committed, so a clone runs
-without a build step. You only need to regenerate after changing their
-sources:
+Two things in `lib/` are generated and already committed, so a clone
+runs without a build step. You only need to regenerate after changing
+their sources:
 
-| If you change | Run |
-|---|---|
-| `@injectable` annotations, or drift tables | `dart run build_runner build --delete-conflicting-outputs` |
-| `lib/l10n/intl_en.arb` | The [Flutter Intl](https://marketplace.visualstudio.com/items?itemName=localizely.flutter-intl) extension regenerates on save |
+| If you change                              | Run                                                                                                                           |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| `@injectable` annotations, or drift tables | `dart run build_runner build --delete-conflicting-outputs`                                                                    |
+| `lib/l10n/intl_en.arb`                     | The [Flutter Intl](https://marketplace.visualstudio.com/items?itemName=localizely.flutter-intl) extension regenerates on save |
 
 ## License
 

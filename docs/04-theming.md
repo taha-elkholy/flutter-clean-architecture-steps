@@ -23,7 +23,8 @@ Pages and widgets read what they need through `Theme.of(context)`, so
 there are no color or `TextStyle` literals left in `lib/pages` or
 `lib/widgets`.
 
-Adding a dark theme later means adding a second `ThemeData` with its own
-`ColorScheme` — no widget changes. And the first time a new component is
-used, such as a `Card` or a `ListTile`, its theme goes here once and
-applies everywhere that widget appears.
+This repo ships only the light theme, but adding a dark one would now
+mean adding a second `ThemeData` with its own `ColorScheme` — no widget
+changes. And the first time a new component is used, such as a `Card` or
+a `ListTile`, its theme goes here once and applies everywhere that
+widget appears.
