@@ -1,7 +1,5 @@
 # 06 — Router
 
-## Problem
-
 Every jump between screens was a `Navigator.push` building the
 destination widget by hand:
 
@@ -51,10 +49,5 @@ section, not the whole file.
 ## Not fixed here
 
 Route arguments are still `Object?` cast in the router — as type-safe as
-`onGenerateRoute` gets on its own. Typed argument objects belong with the
-models branch, where the recipe stops being a `dynamic` map.
-
-## Resource
-
-- [`onGenerateRoute` API docs](https://api.flutter.dev/flutter/material/MaterialApp/onGenerateRoute.html) —
-  why it's preferred over the `routes:` map once routes take arguments.
+`onGenerateRoute` gets on its own. Typed argument objects belong with
+the models branch, where the recipe stops being a `dynamic` map.

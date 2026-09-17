@@ -5,8 +5,9 @@ screens meet.
 
 ## emit after close
 
-A request outlives the page that started it, and `emit` on a closed cubit
-throws. `BaseCubit` guards it once, and all three cubits extend it:
+A request outlives the page that started it, and `emit` on a closed
+cubit throws. `BaseCubit` guards it once, and all three cubits extend
+it:
 
 ```dart
 @override
@@ -34,8 +35,8 @@ instead of one. That is what keeping them alive costs.
 
 `buildWhen` compared the whole slot, and `loadMoreFailed` is inside it,
 so flipping that flag rebuilt the grid with the recipes it already had.
-The switch needs the state, not just the recipes, so the selector returns
-the state with the load-more flags dropped:
+The switch needs the state, not just the recipes, so the selector
+returns the state with the load-more flags dropped:
 
 ```dart
 RecipesSortState get gridState => switch (this) {
@@ -65,11 +66,5 @@ early result can never land after a later one — which also means
 `_search` is a `Stream`, since a `Future` cannot be cancelled.
 
 Retry enters past the debounce on its own subject: it repeats the same
-query on purpose, which is what `distinct` would swallow. Both paths meet
-in the same `switchMap`, so they cannot race.
-
-## Resource
-
-- [RxDart — switchMap](https://pub.dev/documentation/rxdart/latest/rx/SwitchMapExtension/switchMap.html) —
-  why not `flatMap` for a search box.
-- [flutter_bloc — BlocSelector](https://bloclibrary.dev/flutter-bloc-concepts/#blocselector)
+query on purpose, which is what `distinct` would swallow. Both paths
+meet in the same `switchMap`, so they cannot race.

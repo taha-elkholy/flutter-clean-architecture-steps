@@ -1,7 +1,5 @@
 # 07 — Context Extensions
 
-## Problem
-
 Two lookups were written out by hand everywhere, and neither one carries
 any meaning of its own:
 
@@ -11,10 +9,10 @@ final strings = S.of(context);
 Theme.of(context).colorScheme.surfaceContainerHighest
 ```
 
-Branch 04 centralized the colors and 05 centralized the strings, but both
-left the reading side untouched. Every widget still names the machinery
-it goes through — `Theme.of`, the generated `S` — before it gets to the
-value it actually wants.
+Branch 04 centralized the colors and 05 centralized the strings, but
+both left the reading side untouched. Every widget still names the
+machinery it goes through — `Theme.of`, the generated `S` — before it
+gets to the value it actually wants.
 
 ## What changed
 
@@ -45,7 +43,7 @@ placeholder is a plain data function with no context to read from.
 
 ## Why not earlier
 
-Both shorthands could have shipped with the branch that created what they
-read. They didn't, because the point there was moving the values into one
-place — proving that worked meant leaving the call sites obvious first.
-The convenience is a separate change, and reads as one.
+Both shorthands could have shipped with the branch that created what
+they read. They didn't, because the point there was moving the values
+into one place, and proving that worked meant leaving the call sites
+obvious first.
