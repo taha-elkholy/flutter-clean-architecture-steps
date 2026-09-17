@@ -28,7 +28,6 @@ class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
 
   static const _debounce = Duration(milliseconds: 400);
 
-  /// Every keystroke goes in here; what comes out the other end is debounced.
   final _queries = PublishSubject<String>();
 
   final _retries = PublishSubject<String>();
@@ -40,11 +39,9 @@ class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
   /// where the page writes it, so it is the query that actually ran.
   String _query = '';
 
-  /// Takes the query as typed. The debounce is downstream, so this is cheap to
-  /// call on every keystroke.
+  /// The debounce is downstream, so this is cheap to call on every keystroke.
   void queryChanged(String query) => _queries.add(query);
 
-  /// Runs the last query again.
   void retry() => _retries.add(_query);
 
   /// One search as a stream, so `switchMap` can cancel it when it is stale.

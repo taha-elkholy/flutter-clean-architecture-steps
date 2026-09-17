@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 
-// The app's single source of truth for colors and text styles.
-//
-// Nothing here is exposed on its own: pages and widgets read what they
-// need through `Theme.of(context)`. Adding a dark theme later means
-// adding a second ThemeData here, and touching no widgets at all.
 abstract final class AppTheme {
   static ThemeData get light => ThemeData(
     colorScheme: _lightScheme,
@@ -55,16 +50,14 @@ abstract final class AppTheme {
     onError: Colors.white,
   );
 
-  // The Material title size for an app bar, in bold.
   static final TextStyle _appBarTitle = TextStyle(
     color: _lightScheme.onSurface,
     fontSize: 22,
     fontWeight: FontWeight.bold,
   );
 
-  // Sizes and weights only. Colors are left out on purpose — Flutter
-  // resolves them from the ColorScheme, so a second theme restyles every
-  // piece of text in the app by changing colors in one place.
+  // Colors are left out on purpose: Flutter resolves them from the
+  // ColorScheme, so a second theme restyles every piece of text at once.
   static const TextTheme _textTheme = TextTheme(
     // The recipe name on the details page.
     titleMedium: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

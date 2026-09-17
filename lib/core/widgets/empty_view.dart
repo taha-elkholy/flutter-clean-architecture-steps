@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture_steps/core/extensions/build_context_extensions.dart';
 
-/// Shown wherever a screen has nothing to list.
-///
-/// The icon is the same everywhere, so emptiness reads the same across the app;
-/// only [message] says which screen it is.
-///
-/// It scrolls even though it fits: an empty screen offers no other way out, so
-/// a pull-to-refresh above it needs something to pull.
 class EmptyView extends StatelessWidget {
   const EmptyView(this.message, {super.key});
 

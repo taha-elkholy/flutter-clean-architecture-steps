@@ -62,8 +62,6 @@ class RecipesRemoteDataSourceImpl implements RecipesRemoteDataSource {
     });
   }
 
-  /// Runs [read] and rethrows whatever it threw as a named AppException.
-  ///
   /// Parsing is inside, so a body in the wrong shape is named here too. Dio
   /// stops at this line: nothing above the data source sees it.
   Future<T> _read<T>(Future<T> Function() read) async {

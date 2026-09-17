@@ -1486,7 +1486,16 @@ class $$CachedRecipesTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$CachedRecipesTable, CachedRecipeRow>(table),
+                  BaseReferences<
+                    _$CacheDatabase,
+                    $CachedRecipesTable,
+                    CachedRecipeRow
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -1841,7 +1850,19 @@ class $$CachedRecipeDetailsTableTableManager
                 instructions: instructions,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<
+                    $CachedRecipeDetailsTable,
+                    CachedRecipeDetailsRow
+                  >(table),
+                  BaseReferences<
+                    _$CacheDatabase,
+                    $CachedRecipeDetailsTable,
+                    CachedRecipeDetailsRow
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),

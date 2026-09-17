@@ -6,8 +6,6 @@ import 'package:flutter_clean_architecture_steps/features/recipes/domain/entitie
 /// Stands for an argument that was not passed, so null can mean itself.
 const _unset = Object();
 
-/// The state of the recipe list page.
-///
 /// One slot per sort: the two are independent requests, so one loading or
 /// failing says nothing about the other.
 class RecipesListState extends Equatable {
@@ -19,7 +17,6 @@ class RecipesListState extends Equatable {
   final RecipesSortState topRated;
   final RecipesSortState mostReviewed;
 
-  /// The slot belonging to [sort].
   RecipesSortState sortOf(RecipeSort sort) => switch (sort) {
     RecipeSort.topRated => topRated,
     RecipeSort.mostReviewed => mostReviewed,
@@ -39,9 +36,6 @@ class RecipesListState extends Equatable {
   List<Object?> get props => [topRated, mostReviewed];
 }
 
-/// The state of a single sort's list.
-///
-/// Sealed, so the UI has to answer for every case.
 sealed class RecipesSortState extends Equatable {
   const RecipesSortState();
 
@@ -65,9 +59,6 @@ class RecipesSortLoading extends RecipesSortState {
   const RecipesSortLoading();
 }
 
-/// Recipes are on screen.
-///
-/// Pagination lives here rather than on the cubit, which holds no data at all.
 class RecipesSortLoaded extends RecipesSortState {
   const RecipesSortLoaded({
     required this.recipes,
@@ -78,10 +69,7 @@ class RecipesSortLoaded extends RecipesSortState {
   });
 
   final List<RecipeEntity> recipes;
-
-  /// How many recipes have been read so far, sent as the API's `skip`.
   final int skip;
-
   final bool hasMore;
 
   @override
@@ -120,13 +108,10 @@ class RecipesSortLoaded extends RecipesSortState {
   ];
 }
 
-/// The first page came back with no recipes. Its own state, so the page never
-/// has to ask whether a loaded list is empty.
 class RecipesSortEmpty extends RecipesSortState {
   const RecipesSortEmpty();
 }
 
-/// The first page failed, so there is nothing to show.
 class RecipesSortError extends RecipesSortState {
   const RecipesSortError(this.failure);
 

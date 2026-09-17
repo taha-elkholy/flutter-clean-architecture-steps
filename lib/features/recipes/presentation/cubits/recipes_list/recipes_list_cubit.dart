@@ -6,32 +6,26 @@ import 'package:flutter_clean_architecture_steps/features/recipes/domain/usecase
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/cubits/recipes_list/recipes_list_state.dart';
 import 'package:injectable/injectable.dart';
 
-/// Owns the first page, pagination and refresh for each of the two sorts.
-///
-/// It holds no data: everything the list knows about itself lives in
-/// [RecipesListState].
 @injectable
 class RecipesListCubit extends BaseCubit<RecipesListState> {
   RecipesListCubit(this._getRecipeList) : super(const RecipesListState());
 
   final GetRecipeListUseCase _getRecipeList;
 
-  /// Loads the first page of [sort], replacing whatever that slot held.
   Future<void> fetchRecipes(RecipeSort sort) async {
     _emitFor(sort, const RecipesSortLoading());
     _emitFor(sort, await _firstPage(sort));
   }
 
-  /// Loads [sort] only if it has never been read. This is what the two slots
-  /// buy: switching tabs shows what is already there instead of fetching it
-  /// again.
+  /// This is what the two slots buy: switching tabs shows what is already
+  /// there instead of fetching it again.
   Future<void> fetchIfNeeded(RecipeSort sort) async {
     if (state.sortOf(sort) is! RecipesSortInitial) return;
     await fetchRecipes(sort);
   }
 
-  /// Appends the next page to [sort]. Does nothing unless that sort is loaded
-  /// with more to read, so the scroll listener can call it freely.
+  /// Does nothing unless that sort is loaded with more to read, so the scroll
+  /// listener can call it freely.
   Future<void> loadMore(RecipeSort sort) async {
     final current = state.sortOf(sort);
     if (current is! RecipesSortLoaded) return;
@@ -68,8 +62,8 @@ class RecipesListCubit extends BaseCubit<RecipesListState> {
     );
   }
 
-  /// Re-reads the first page of [sort]. Emits no loading state: pull-to-refresh
-  /// draws its own spinner, so the recipes stay visible until replaced.
+  /// Emits no loading state: pull-to-refresh draws its own spinner, so the
+  /// recipes stay visible until replaced.
   Future<void> refresh(RecipeSort sort) async {
     final result = await _getPage(sort: sort, skip: 0);
     final current = state.sortOf(sort);
@@ -86,7 +80,6 @@ class RecipesListCubit extends BaseCubit<RecipesListState> {
     );
   }
 
-  /// Reads page one of [sort] and turns it into the state it belongs in.
   Future<RecipesSortState> _firstPage(RecipeSort sort) async {
     final result = await _getPage(sort: sort, skip: 0);
 

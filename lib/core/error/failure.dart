@@ -13,7 +13,6 @@ class Failure extends Equatable {
   List<Object?> get props => [message];
 }
 
-/// Phrases [exception] for the screen.
 Failure mapFailure(AppException exception) {
   return Failure(message: _messageFor(exception.errorCode));
 }

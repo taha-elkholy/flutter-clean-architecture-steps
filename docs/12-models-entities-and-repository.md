@@ -7,12 +7,13 @@ typo in `recipe['nmae']` compiled, shipped, and failed on screen.
 
 `RecipeModel` is the server's shape: every field nullable, `fromMap` and
 `toMap`, no opinion about missing data. `RecipeEntity` is the app's
-shape: nothing nullable, Equatable, safe to read without asking. The list
-and details endpoints return different records, so each gets its own pair.
+shape: nothing nullable, Equatable, safe to read without asking. The
+list and details endpoints return different records, so each gets its
+own pair.
 
-A `toEntity()` extension on each model turns null into the empty value of
-its own type — `0`, `''`, `const []`. One place decides what a missing
-field means, so no screen has to.
+A `toEntity()` extension on each model turns null into the empty value
+of its own type — `0`, `''`, `const []`. One place decides what a
+missing field means, so no screen has to.
 
 ## The repository
 
@@ -29,7 +30,8 @@ parameters span more than one type.
 
 The states hold entities, so `props` compares the recipes themselves.
 Comparing `recipes.length` was a workaround for maps having no equality,
-and it was wrong: a refresh returning ten different recipes never redrew.
+and it was wrong: a refresh returning ten different recipes never
+redrew.
 
 ## The wiring got worse on purpose
 

@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture_steps/core/extensions/build_context_extensions.dart';
 
-// Bouncing dots loader, used everywhere instead of CircularProgressIndicator.
 class LoadingDots extends StatefulWidget {
   const LoadingDots({super.key, this.size = 9});
   final double size;

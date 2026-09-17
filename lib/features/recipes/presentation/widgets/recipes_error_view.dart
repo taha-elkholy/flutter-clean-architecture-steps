@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture_steps/core/error/failure.dart';
 import 'package:flutter_clean_architecture_steps/core/extensions/build_context_extensions.dart';
 
-/// Shown when a request fails and there is nothing on screen to keep.
 class RecipesErrorView extends StatelessWidget {
   const RecipesErrorView({
     required this.failure,
@@ -10,7 +9,6 @@ class RecipesErrorView extends StatelessWidget {
     super.key,
   });
 
-  /// The whole failure, so what is shown can grow past the message.
   final Failure failure;
 
   final VoidCallback onRetry;

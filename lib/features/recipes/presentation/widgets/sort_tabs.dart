@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture_steps/core/extensions/build_context_extensions.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/entities/recipe_sort.dart';
 
-/// The sort chip row above the recipe grid.
 class SortTabs extends StatelessWidget {
   const SortTabs({required this.selected, required this.onChanged, super.key});
 

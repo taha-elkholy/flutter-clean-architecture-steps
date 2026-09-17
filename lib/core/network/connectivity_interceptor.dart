@@ -3,8 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter_clean_architecture_steps/core/error/app_exception.dart';
 import 'package:flutter_clean_architecture_steps/core/error/error_codes.dart';
 
-/// Fails a request before it is sent when no network interface is up.
-///
 /// [Connectivity] reports the interface, not whether the internet is
 /// reachable, so wifi that leads nowhere still goes out and fails later.
 class ConnectivityInterceptor extends Interceptor {

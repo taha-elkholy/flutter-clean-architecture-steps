@@ -1,9 +1,7 @@
 import 'package:drift/drift.dart';
 
-/// One recipe as a sort listed it.
-///
-/// The key is the pair, so a recipe in both sorts is stored twice. That
-/// duplication is what keeps reading a page a single query.
+/// The key is the (id, sort) pair, so a recipe in both sorts is stored twice.
+/// That duplication is what keeps reading a page a single query.
 @DataClassName('CachedRecipeRow')
 class CachedRecipes extends Table {
   IntColumn get id => integer()();

@@ -16,7 +16,7 @@ wants a state back and one that only emits.
 `_read` in the repository is now the only `catch` between Dio and the
 screen: it maps the exception to a `Failure` and returns it as a value.
 
-`mapFailure(mapAppException(error))` used to appear in seven `try/catch`
+`mapFailure(mapAppException(error))` used to appear in five `try/catch`
 blocks across three cubits. It lives in one place now, and
 `AppException` never leaves the repository.
 

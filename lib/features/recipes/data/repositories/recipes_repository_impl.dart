@@ -19,11 +19,9 @@ class RecipesRepositoryImpl implements RecipesRepository {
   final RecipesRemoteDataSource _remote;
   final RecipesLocalDataSource _local;
 
-  /// Reads a page, and falls back to what was saved only for the first one.
-  ///
-  /// A later page cannot fall back: the cache holds what the server already
-  /// sent, so answering a `loadMore` from it would repeat recipes already on
-  /// screen. Failing there leaves the list as it is instead.
+  /// Only the first page falls back to the cache: the cache holds what the
+  /// server already sent, so answering a `loadMore` from it would repeat
+  /// recipes already on screen.
   @override
   Future<Result<RecipesPageEntity>> getRecipes(GetRecipesParams params) async {
     try {
@@ -46,16 +44,14 @@ class RecipesRepositoryImpl implements RecipesRepository {
     }
   }
 
-  /// No fallback here. The cache holds what this device happened to scroll
-  /// past, so a local search would answer from a fraction of the catalogue
-  /// without saying so — and the server searches ingredients and instructions
-  /// too, not just the name. Failing is the honest answer.
+  /// No cache fallback: the cache holds what this device happened to scroll
+  /// past, so a local search would answer from a fraction of the catalogue —
+  /// and the server searches ingredients and instructions too, not just names.
   @override
   Future<Result<RecipesPageEntity>> searchRecipes(String query) {
     return _read(() async => (await _remote.searchRecipes(query)).toEntity());
   }
 
-  /// Reads one recipe, and falls back to the copy saved when it was last read.
   @override
   Future<Result<RecipeDetailsEntity>> getRecipeDetails(int recipeId) async {
     try {
@@ -71,10 +67,8 @@ class RecipesRepositoryImpl implements RecipesRepository {
     }
   }
 
-  /// Everything saved for this sort, as one page.
-  ///
-  /// [RecipesPageEntity.total] is what it holds rather than what the server
-  /// has, so the list stops asking for more while it is offline.
+  /// [RecipesPageEntity.total] is what the cache holds rather than what the
+  /// server has, so the list stops asking for more while it is offline.
   Future<Result<RecipesPageEntity>> _cachedPage(
     GetRecipesParams params,
     AppException appException,
@@ -92,8 +86,6 @@ class RecipesRepositoryImpl implements RecipesRepository {
     );
   }
 
-  /// Runs [read] and answers null if the cache refuses it.
-  ///
   /// Only ever called once the network has already failed, and a cache that
   /// fails too says nothing the network error does not say better.
   Future<T?> _cached<T>(Future<T?> Function() read) async {
@@ -104,8 +96,6 @@ class RecipesRepositoryImpl implements RecipesRepository {
     }
   }
 
-  /// Runs [write] and swallows a cache that refuses it.
-  ///
   /// Saving is what the next run reads, never what this one answers with: a
   /// full disk must not turn a request that worked into an error on screen.
   Future<void> _save(Future<void> Function() write) async {
@@ -116,10 +106,6 @@ class RecipesRepositoryImpl implements RecipesRepository {
     }
   }
 
-  /// Runs [read] and answers with a [Result] either way.
-  ///
-  /// A data source names what went wrong; this turns that name into the
-  /// message a screen can show.
   Future<Result<T>> _read<T>(Future<T> Function() read) async {
     try {
       return Result.success(await read());

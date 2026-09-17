@@ -4,8 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter_clean_architecture_steps/core/error/app_exception.dart';
 import 'package:flutter_clean_architecture_steps/core/error/error_codes.dart';
 
-/// Turns anything thrown at the network into a named [AppException]. The only
-/// place that knows about Dio.
 AppException mapAppException(Object error) {
   return switch (error) {
     final AppException appException => appException,

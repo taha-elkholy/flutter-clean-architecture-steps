@@ -1,5 +1,3 @@
-/// The two sort options the recipe list can be ordered by.
-///
 /// Each carries its own API value, so call sites never map one to the other.
 enum RecipeSort {
   topRated('rating'),

@@ -46,7 +46,3 @@ case, never the guarantee.
 
 The cubits still call the network directly and read an untyped `Map`,
 and each one builds its own `ApiClient`.
-
-## Resource
-
-- [Dio — handling errors](https://pub.dev/packages/dio#handling-errors)

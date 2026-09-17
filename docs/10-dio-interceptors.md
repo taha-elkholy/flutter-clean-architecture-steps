@@ -47,7 +47,3 @@ The cubits catch `Object` and throw away the `DioException` that says
 what actually failed. They still call the network directly and read an
 untyped `Map`. And each one builds its own `ApiClient`, which builds its
 own `Dio` — three clients, no way to hand either a fake.
-
-## Resource
-
-- [Dio — interceptors](https://pub.dev/packages/dio#interceptors)

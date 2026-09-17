@@ -1,8 +1,8 @@
 # 16 — Data Sources and Caching
 
-`RecipesRepositoryImpl` built urls, parsed models, and caught every error.
-Three jobs, and no room for a fourth: there was nowhere to put a second
-place the data could come from.
+`RecipesRepositoryImpl` built urls, parsed models, and caught every
+error. Three jobs, and no room for a fourth: there was nowhere to put a
+second place the data could come from.
 
 ## The remote data source
 
@@ -23,9 +23,9 @@ cached_recipe_details  the full record, keyed by id
 twelve. Merged, a list refresh would upsert its six over a full row and
 drop the rest.
 
-**A position column**, because `reviewCount` never reaches the client and
-a stored `rating` goes stale. The cache remembers the order the server
-chose instead of deriving it.
+**A position column**, because `reviewCount` never reaches the client
+and a stored `rating` goes stale. The cache remembers the order the
+server chose instead of deriving it.
 
 **A recipe stored twice**, once per sort. An earlier draft added a third
 table to avoid that, and reading a page then took two queries and a
@@ -66,7 +66,7 @@ nothing, so it went.
 
 ## Still not solved
 
-Every page builds a client, two data sources, a repository and a use case
-by hand. `CacheDatabase` is `static` because three pages opening the same
-file would not see each other's writes — a stand-in for the dependency
-injection that comes next.
+Every page builds a client, two data sources, a repository and a use
+case by hand. `CacheDatabase` is `static` because three pages opening
+the same file would not see each other's writes — a stand-in for the
+dependency injection that comes next.

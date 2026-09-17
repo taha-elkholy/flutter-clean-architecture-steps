@@ -58,9 +58,9 @@ class RecipesLocalDataSourceImpl implements RecipesLocalDataSource {
 
       await _database.transaction(() async {
         if (replace) {
-          await (_database.delete(_database.cachedRecipes)
-                ..where((row) => row.sort.equals(sort.queryValue)))
-              .go();
+          await (_database.delete(
+            _database.cachedRecipes,
+          )..where((row) => row.sort.equals(sort.queryValue))).go();
         }
 
         await _database.batch(
@@ -94,10 +94,8 @@ class RecipesLocalDataSourceImpl implements RecipesLocalDataSource {
     });
   }
 
-  /// Runs [read] and names anything the database throws.
-  ///
-  /// One code for all of it: a screen has nothing different to say about a
-  /// locked file and a failed write.
+  /// One code for everything the database throws: a screen has nothing
+  /// different to say about a locked file and a failed write.
   Future<T> _read<T>(Future<T> Function() read) async {
     try {
       return await read();
