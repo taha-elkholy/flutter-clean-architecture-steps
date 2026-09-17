@@ -50,13 +50,11 @@ frozen here forever, so you can always come back and compare.
   (`select=name,image,rating,cuisine,difficulty`), so fetching the full
   recipe by id is genuinely necessary — but the fields already in hand
   could be shown instantly instead of waiting on the whole response.
-- **`withOpacity` is used** even though it's deprecated in current
-  Flutter.
 
-Each of these becomes the subject of a later, focused branch — one
-problem at a time, never several at once.
+Most of these become the subject of a later, focused branch — one
+problem at a time, never several at once — and the rest are still open.
 
-## What is deliberately *not* a problem
+## What is deliberately _not_ a problem
 
 The app looks good, and that's on purpose. A polished UI on top of
 unstructured code is exactly the situation this repo is about: the user

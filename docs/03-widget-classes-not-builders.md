@@ -1,7 +1,7 @@
 # 03 — Widget Classes, Not Builder Functions
 
-A function that returns a `Widget` looks like a widget but isn't one.
-It has no `Element` of its own in the tree, so it can't be isolated or
+A function that returns a `Widget` looks like a widget but isn't one. It
+has no `Element` of its own in the tree, so it can't be isolated or
 skipped on rebuild — every rebuild of whatever called it rebuilds this
 too. It also won't show up as its own node in the widget inspector.
 
