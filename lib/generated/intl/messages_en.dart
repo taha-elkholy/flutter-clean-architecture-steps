@@ -31,6 +31,9 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "appTitle": MessageLookupByLibrary.simpleMessage("Recipes"),
+    "cacheError": MessageLookupByLibrary.simpleMessage(
+      "We could not read the data saved on your device",
+    ),
     "cuisinePlaceholder": MessageLookupByLibrary.simpleMessage("Cuisine"),
     "difficultyPlaceholder": MessageLookupByLibrary.simpleMessage("Easy"),
     "ingredients": MessageLookupByLibrary.simpleMessage("Ingredients"),

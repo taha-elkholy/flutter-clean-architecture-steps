@@ -26,6 +26,7 @@ String _messageFor(String errorCode) {
     ErrorCodes.notFound => S.current.notFoundError,
     ErrorCodes.serverError => S.current.serverError,
     ErrorCodes.parsingError => S.current.parsingError,
+    ErrorCodes.cacheError => S.current.cacheError,
     _ => S.current.somethingWentWrong,
   };
 }

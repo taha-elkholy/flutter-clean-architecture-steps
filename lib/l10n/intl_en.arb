@@ -107,6 +107,10 @@
     "@parsingError": {
         "description": "Error message shown when the response body is not in the shape the app expects"
     },
+    "cacheError": "We could not read the data saved on your device",
+    "@cacheError": {
+        "description": "Error message shown when reading from or writing to the local database fails, whichever table it was"
+    },
     "retry": "Retry",
     "@retry": {
         "description": "Button that runs the failed request again"

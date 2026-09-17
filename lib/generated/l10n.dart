@@ -262,6 +262,17 @@ class S {
     );
   }
 
+  /// `We could not read the data saved on your device`
+  String get cacheError {
+    return Intl.message(
+      'We could not read the data saved on your device',
+      name: 'cacheError',
+      desc:
+          'Error message shown when reading from or writing to the local database fails, whichever table it was',
+      args: [],
+    );
+  }
+
   /// `Retry`
   String get retry {
     return Intl.message(

@@ -4,6 +4,7 @@ analyzer:
   # Generated code is rewritten on every build, so lint fixes never survive.
   exclude:
     - lib/generated/**
+    - "**/*.g.dart"
 
   language:
     strict-casts: true
