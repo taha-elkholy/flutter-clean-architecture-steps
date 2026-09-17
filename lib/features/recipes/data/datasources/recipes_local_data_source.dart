@@ -6,6 +6,7 @@ import 'package:flutter_clean_architecture_steps/features/recipes/data/mappers/c
 import 'package:flutter_clean_architecture_steps/features/recipes/data/models/recipe_details_model.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/data/models/recipe_model.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/entities/recipe_sort.dart';
+import 'package:injectable/injectable.dart';
 
 abstract class RecipesLocalDataSource {
   Future<List<RecipeModel>> getRecipes(RecipeSort sort);
@@ -22,6 +23,7 @@ abstract class RecipesLocalDataSource {
   Future<void> saveRecipeDetails(RecipeDetailsModel details);
 }
 
+@LazySingleton(as: RecipesLocalDataSource)
 class RecipesLocalDataSourceImpl implements RecipesLocalDataSource {
   const RecipesLocalDataSourceImpl(this._database);
 
