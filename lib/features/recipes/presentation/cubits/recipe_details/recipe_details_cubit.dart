@@ -1,7 +1,9 @@
 import 'package:flutter_clean_architecture_steps/core/base/base_cubit.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/usecases/get_recipe_details_usecase.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/cubits/recipe_details/recipe_details_state.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class RecipeDetailsCubit extends BaseCubit<RecipeDetailsState> {
   RecipeDetailsCubit(this._getRecipeDetails)
     : super(const RecipeDetailsInitial());

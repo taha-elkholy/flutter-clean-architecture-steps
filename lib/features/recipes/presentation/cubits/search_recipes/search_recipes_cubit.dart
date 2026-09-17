@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter_clean_architecture_steps/core/base/base_cubit.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/usecases/search_recipes_usecase.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/cubits/search_recipes/search_recipes_state.dart';
+import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 
+@injectable
 class SearchRecipesCubit extends BaseCubit<SearchRecipesState> {
   SearchRecipesCubit(this._searchRecipes)
     : super(const SearchRecipesInitial()) {

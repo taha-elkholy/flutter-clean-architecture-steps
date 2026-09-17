@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_clean_architecture_steps/core/network/connectivity_interceptor.dart';
 import 'package:flutter_clean_architecture_steps/core/network/logging_interceptor.dart';
+import 'package:injectable/injectable.dart';
 
 /// The one way this app talks to the network.
 ///
@@ -9,6 +10,7 @@ import 'package:flutter_clean_architecture_steps/core/network/logging_intercepto
 /// logging are configured here alone.
 ///
 /// It exposes [get] alone, because reading is all this app does.
+@lazySingleton
 class ApiClient {
   static const _baseUrl = 'https://dummyjson.com';
   static const _timeout = Duration(seconds: 15);

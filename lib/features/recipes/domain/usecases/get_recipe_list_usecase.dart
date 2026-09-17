@@ -3,7 +3,9 @@ import 'package:flutter_clean_architecture_steps/features/recipes/domain/entitie
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/entities/recipe_sort.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/entities/recipes_page_entity.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/repositories/recipes_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class GetRecipeListUseCase {
   const GetRecipeListUseCase(this._repository);
 

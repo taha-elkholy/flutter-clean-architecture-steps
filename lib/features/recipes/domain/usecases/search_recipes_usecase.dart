@@ -1,7 +1,9 @@
 import 'package:flutter_clean_architecture_steps/core/result/result.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/entities/recipes_page_entity.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/repositories/recipes_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class SearchRecipesUseCase {
   const SearchRecipesUseCase(this._repository);
 

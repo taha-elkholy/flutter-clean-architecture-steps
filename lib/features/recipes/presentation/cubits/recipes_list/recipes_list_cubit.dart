@@ -4,11 +4,13 @@ import 'package:flutter_clean_architecture_steps/features/recipes/domain/entitie
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/entities/recipes_page_entity.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/usecases/get_recipe_list_usecase.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/cubits/recipes_list/recipes_list_state.dart';
+import 'package:injectable/injectable.dart';
 
 /// Owns the first page, pagination and refresh for each of the two sorts.
 ///
 /// It holds no data: everything the list knows about itself lives in
 /// [RecipesListState].
+@injectable
 class RecipesListCubit extends BaseCubit<RecipesListState> {
   RecipesListCubit(this._getRecipeList) : super(const RecipesListState());
 

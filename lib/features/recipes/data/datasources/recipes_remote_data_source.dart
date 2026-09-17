@@ -3,6 +3,7 @@ import 'package:flutter_clean_architecture_steps/core/network/api_client.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/data/models/recipe_details_model.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/data/models/recipes_page_model.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/entities/params/get_recipes_params.dart';
+import 'package:injectable/injectable.dart';
 
 abstract class RecipesRemoteDataSource {
   Future<RecipesPageModel> getRecipes(GetRecipesParams params);
@@ -12,6 +13,7 @@ abstract class RecipesRemoteDataSource {
   Future<RecipeDetailsModel> getRecipeDetails(int recipeId);
 }
 
+@LazySingleton(as: RecipesRemoteDataSource)
 class RecipesRemoteDataSourceImpl implements RecipesRemoteDataSource {
   const RecipesRemoteDataSourceImpl(this._client);
 
