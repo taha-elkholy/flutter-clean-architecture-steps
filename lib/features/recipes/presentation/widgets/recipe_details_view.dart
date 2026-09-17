@@ -3,7 +3,6 @@ import 'package:flutter_clean_architecture_steps/core/extensions/build_context_e
 import 'package:flutter_clean_architecture_steps/core/widgets/network_image_with_shimmer.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/entities/recipe_details_entity.dart';
 
-/// The details body once the recipe has arrived.
 class RecipeDetailsView extends StatelessWidget {
   const RecipeDetailsView({required this.recipe, super.key});
 

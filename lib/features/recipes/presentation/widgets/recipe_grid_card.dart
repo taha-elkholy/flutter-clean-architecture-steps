@@ -4,10 +4,6 @@ import 'package:flutter_clean_architecture_steps/core/widgets/network_image_with
 import 'package:flutter_clean_architecture_steps/features/recipes/domain/entities/recipe_entity.dart';
 import 'package:flutter_clean_architecture_steps/generated/l10n.dart';
 
-// Shared card UI for both the home grid and the search grid.
-// Duplicated on purpose is avoided here for one widget only (the card),
-// while the fetch logic itself still lives separately in each page's State
-// — that duplication is intentional and left for a later branch.
 class RecipeGridCard extends StatelessWidget {
   const RecipeGridCard({required this.recipe, this.onTap, super.key});
 
@@ -99,9 +95,8 @@ const recipeGridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
   childAspectRatio: 0.72,
 );
 
-// Uses S.current instead of S.of(context): this is a plain data helper with
-// no BuildContext of its own, and the placeholder is only ever built while
-// the app is already running with a resolved locale.
+// S.current rather than S.of(context): this helper has no BuildContext, and
+// is only ever built while the app already has a resolved locale.
 RecipeEntity placeholderRecipe(int id) => RecipeEntity(
   id: id,
   name: S.current.recipeNamePlaceholder,

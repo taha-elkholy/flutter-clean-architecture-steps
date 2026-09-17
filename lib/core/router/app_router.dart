@@ -5,16 +5,11 @@ import 'package:flutter_clean_architecture_steps/features/recipes/presentation/p
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/pages/recipe_list_page.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/pages/search_recipe_page.dart';
 
-/// The single place that turns a route name into a screen.
-///
 /// Screens push names, never widgets, so no page needs to import another page
-/// to navigate to it, and the whole navigation map of the app is readable in
-/// one file.
+/// to navigate to it.
 abstract final class AppRouter {
-  /// Wired into `MaterialApp.onGenerateRoute`.
-  ///
   /// Unknown names — and known names given the wrong arguments — fall through
-  /// to [RouteNotFoundPage] at the bottom rather than throwing.
+  /// to [RouteNotFoundPage] rather than throwing.
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case AppRoutes.recipeList:

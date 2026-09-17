@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_clean_architecture_steps/core/extensions/build_context_extensions.dart';
 
-/// Fallback screen for a route the router does not know.
-///
-/// It exists so an unknown or malformed route lands on a real screen the user
-/// can back out of, instead of a black screen or a thrown route error.
+/// An unknown or malformed route lands here, on a real screen the user can
+/// back out of, instead of a black screen or a thrown route error.
 class RouteNotFoundPage extends StatelessWidget {
   const RouteNotFoundPage({required this.routeName, super.key});
 
-  /// The route that could not be resolved, shown to make the mistake obvious.
   final String routeName;
 
   @override

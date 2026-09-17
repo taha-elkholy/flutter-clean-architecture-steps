@@ -1,7 +1,3 @@
-/// One recipe as the list and search endpoints return it.
-///
-/// Every field is nullable: this is the server's shape, not ours. Filling the
-/// gaps is the mapper's job, not this class's.
 class RecipeModel {
   const RecipeModel({
     this.id,

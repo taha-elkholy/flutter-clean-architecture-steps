@@ -14,11 +14,8 @@ import 'package:flutter_clean_architecture_steps/features/recipes/presentation/c
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/widgets/recipes_error_view.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/widgets/recipes_grid.dart';
 
-/// One tab of the recipe list: everything that belongs to a single [sort].
-///
 /// Both tabs are alive at once inside the page's `IndexedStack`, so each needs
-/// its own scroll controller and reads only its own slot. The page keeps the
-/// index and nothing else.
+/// its own scroll controller and reads only its own slot.
 class RecipesSortTab extends StatefulWidget {
   const RecipesSortTab({required this.sort, super.key});
 
@@ -35,8 +32,8 @@ class _RecipesSortTabState extends State<RecipesSortTab> {
   void initState() {
     super.initState();
     scrollController.addListener(_onScroll);
-    // The tab asks for its own first page. Switching tabs no longer builds
-    // this widget again, so this runs once per tab.
+    // Switching tabs no longer builds this widget again, so this runs once
+    // per tab.
     unawaited(context.read<RecipesListCubit>().fetchIfNeeded(widget.sort));
   }
 
@@ -88,7 +85,6 @@ class _RecipesSortTabState extends State<RecipesSortTab> {
                     RecipesListState,
                     RecipesSortState
                   >(
-                    // This tab's slot, without the flags the dots own.
                     selector: (state) => state.sortOf(widget.sort).gridState,
                     builder: (context, sortState) => switch (sortState) {
                       RecipesSortInitial() ||

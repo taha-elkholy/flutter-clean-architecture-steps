@@ -10,10 +10,6 @@ import 'package:flutter_clean_architecture_steps/features/recipes/presentation/c
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/widgets/recipes_sort_tab.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/widgets/sort_tabs.dart';
 
-/// Owns the list cubit for as long as this screen is on the stack.
-///
-/// No separate view widget: the page reads nothing from the cubit, so it can
-/// provide it and sit above it at once.
 class RecipeListPage extends StatefulWidget {
   const RecipeListPage({super.key});
 
@@ -21,8 +17,6 @@ class RecipeListPage extends StatefulWidget {
   State<RecipeListPage> createState() => _RecipeListPageState();
 }
 
-/// Stateful for the selected sort alone. Each tab keeps its own scroll position
-/// and reads its own slot; this page only decides which one is on top.
 class _RecipeListPageState extends State<RecipeListPage> {
   RecipeSort sortBy = RecipeSort.topRated;
 

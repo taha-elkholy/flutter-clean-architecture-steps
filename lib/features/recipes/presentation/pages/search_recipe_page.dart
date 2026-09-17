@@ -12,8 +12,6 @@ import 'package:flutter_clean_architecture_steps/features/recipes/presentation/c
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/widgets/recipes_error_view.dart';
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/widgets/recipes_grid.dart';
 
-/// Takes the search cubit from the locator and owns it for as long as this
-/// screen is on the stack.
 class SearchRecipePage extends StatelessWidget {
   const SearchRecipePage({super.key});
 
@@ -33,7 +31,6 @@ class SearchRecipeView extends StatefulWidget {
   State<SearchRecipeView> createState() => _SearchRecipeViewState();
 }
 
-/// Stateful only for the text controller. The results live in the cubit.
 class _SearchRecipeViewState extends State<SearchRecipeView> {
   final TextEditingController controller = TextEditingController();
 

@@ -1,5 +1,3 @@
-/// One recipe as the details endpoint returns it: the full record, not the
-/// lightweight one the list asks for.
 class RecipeDetailsModel {
   const RecipeDetailsModel({
     this.id,

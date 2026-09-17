@@ -3,8 +3,6 @@ import 'package:flutter_clean_architecture_steps/features/recipes/domain/entitie
 import 'package:flutter_clean_architecture_steps/features/recipes/presentation/widgets/recipe_grid_card.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-/// The recipe grid, used by both the list page and the search page.
-///
 /// The skeleton is the same grid built from fake recipes, so the placeholder
 /// keeps the exact shape of the content it stands in for.
 class RecipesGrid extends StatelessWidget {

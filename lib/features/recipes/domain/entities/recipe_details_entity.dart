@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-/// The full recipe as the details page uses it.
 class RecipeDetailsEntity extends Equatable {
   const RecipeDetailsEntity({
     required this.id,

@@ -3,13 +3,8 @@ import 'package:flutter_clean_architecture_steps/core/network/connectivity_inter
 import 'package:flutter_clean_architecture_steps/core/network/logging_interceptor.dart';
 import 'package:injectable/injectable.dart';
 
-/// The one way this app talks to the network.
-///
 /// Dio lives inside this class and never leaves it: callers pass a path and a
-/// query, and get a decoded body back. The base url, the timeouts and the
-/// logging are configured here alone.
-///
-/// It exposes [get] alone, because reading is all this app does.
+/// query, and get a decoded body back.
 @lazySingleton
 class ApiClient {
   static const _baseUrl = 'https://dummyjson.com';
@@ -28,8 +23,6 @@ class ApiClient {
           LoggingInterceptor(),
         ]);
 
-  /// Reads [path] and returns the decoded body.
-  ///
   /// Dio decodes the json itself and throws on a failing status code, so
   /// neither is left to the caller.
   Future<Map<String, dynamic>> get(
